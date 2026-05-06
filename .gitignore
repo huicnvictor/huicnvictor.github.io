@@ -1,0 +1,9 @@
+# Source video files (kept locally, GIFs are what's used on the site)
+*.mp4
+
+# OS / editor cruft
+Thumbs.db
+.DS_Store
+*.swp
+.vscode/
+.idea/

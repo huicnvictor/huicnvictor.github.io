@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pulse Plan — Case Study · Hui Wang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Archivo+Black&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #F5F0E8;
+      --ink: #1A1A1A;
+      --red: #E63946;
+      --blue: #2D5FD8;
+      --yellow: #FFD43B;
+      --line: 2.5px;
+      /* Mockup keeps Neumorphism — represents the actual app */
+      --neumo-bg: #E4E9F0;
+      --neumo-shadow-dark: #BEC8D4;
+      --neumo-shadow-light: #FFFFFF;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+    a { color: inherit; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 6%;
+      background: var(--bg);
+      border-bottom: var(--line) solid var(--ink);
+    }
+    .nav-back {
+      display: flex; align-items: center; gap: 0.4rem;
+      text-decoration: none;
+      font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding-bottom: 4px;
+      position: relative;
+    }
+    .nav-back::after {
+      content: ''; position: absolute; left: 0; bottom: 0;
+      width: 0; height: 3px; background: var(--blue);
+      transition: width 0.2s;
+    }
+    .nav-back:hover::after { width: 100%; }
+    .nav-back svg { width: 14px; height: 14px; }
+    .nav-logo {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1rem; letter-spacing: 0.06em;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .nav-logo .dot {
+      width: 12px; height: 12px;
+      background: var(--red);
+    }
+    .nav-status {
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--ink);
+      background: var(--yellow);
+      border: var(--line) solid var(--ink);
+      padding: 0.3rem 0.7rem;
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .status-dot {
+      width: 8px; height: 8px; background: var(--red);
+      animation: blink 1.4s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 8rem 6% 5rem;
+      position: relative; overflow: hidden;
+    }
+    /* Geometric decorations */
+    .geo {
+      position: absolute;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .geo-circle {
+      width: 220px; height: 220px;
+      background: var(--red);
+      border: var(--line) solid var(--ink);
+      border-radius: 50%;
+      top: 10%; right: -60px;
+    }
+    .geo-square {
+      width: 100px; height: 100px;
+      background: var(--blue);
+      border: var(--line) solid var(--ink);
+      bottom: 12%; left: 4%;
+      transform: rotate(-12deg);
+    }
+    .geo-triangle {
+      width: 0; height: 0;
+      border-left: 50px solid transparent;
+      border-right: 50px solid transparent;
+      border-bottom: 86px solid var(--yellow);
+      filter: drop-shadow(2.5px 2.5px 0 var(--ink));
+      bottom: 30%; right: 8%;
+    }
+    .geo-line-h {
+      position: absolute;
+      height: 4px;
+      width: 90px;
+      background: var(--ink);
+      top: 22%; left: 4%;
+    }
+    .geo-dot {
+      position: absolute;
+      width: 14px; height: 14px;
+      background: var(--blue);
+      border-radius: 50%;
+      top: 30%; left: 12%;
+    }
+
+    .hero-inner {
+      position: relative; z-index: 1;
+      max-width: 1100px; width: 100%;
+      margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    }
+    @media(max-width:768px){.hero-inner{grid-template-columns:1fr;gap:2.5rem}}
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--ink);
+      background: var(--yellow);
+      border: var(--line) solid var(--ink);
+      padding: 0.4rem 0.9rem;
+      margin-bottom: 1.6rem;
+    }
+    .hero-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(2.6rem, 6vw, 4.8rem);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.2rem;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+    .hero-title .accent { color: var(--red); }
+    .hero-tagline {
+      font-size: 1.05rem;
+      margin-bottom: 2rem;
+      max-width: 460px;
+      font-weight: 500;
+    }
+    .hero-cta { display: flex; gap: 0.9rem; flex-wrap: wrap; }
+    .btn {
+      padding: 0.85rem 1.7rem;
+      font-size: 0.85rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      text-decoration: none;
+      border: var(--line) solid var(--ink);
+      transition: transform 0.15s, box-shadow 0.15s;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      cursor: pointer;
+      background: var(--bg); color: var(--ink);
+    }
+    .btn-primary { background: var(--yellow); }
+    .btn-primary:hover { transform: translate(-3px,-3px); box-shadow: 6px 6px 0 var(--ink); }
+    .btn-outline { background: var(--bg); }
+    .btn-outline:hover { transform: translate(-3px,-3px); box-shadow: 6px 6px 0 var(--blue); }
+    .btn-blue { background: var(--blue); color: #fff; }
+    .btn-blue:hover { transform: translate(-3px,-3px); box-shadow: 6px 6px 0 var(--ink); }
+
+    /* ── HERO MOCKUP — Neumorphism preserved (it represents the actual app) ── */
+    .hero-visual {
+      background: var(--bg);
+      border: var(--line) solid var(--ink);
+      padding: 1rem;
+      box-shadow: 8px 8px 0 var(--ink);
+    }
+    .mockup-bar {
+      display: flex; align-items: center; gap: 0.4rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 2px solid var(--ink);
+      margin-bottom: 1rem;
+    }
+    .mockup-dot { width: 11px; height: 11px; border: 2px solid var(--ink); }
+    .mockup-title { font-size: 0.72rem; font-weight: 600; color: var(--ink); margin-left: auto; letter-spacing: 0.05em; }
+
+    /* The actual app preview — Neumorphism */
+    .mockup-screen {
+      background: var(--neumo-bg);
+      padding: 1.2rem;
+      border-radius: 16px;
+      box-shadow: inset 4px 4px 8px var(--neumo-shadow-dark), inset -4px -4px 8px var(--neumo-shadow-light);
+    }
+    .mockup-sidebar { display: flex; gap: 0.8rem; }
+    .mockup-nav {
+      width: 38px; display: flex; flex-direction: column; gap: 0.5rem;
+      padding: 0.4rem;
+      background: var(--neumo-bg);
+      border-radius: 12px;
+      box-shadow: 3px 3px 6px var(--neumo-shadow-dark), -3px -3px 6px var(--neumo-shadow-light);
+    }
+    .mnav-item {
+      width: 28px; height: 28px; border-radius: 8px;
+      background: var(--neumo-bg);
+      box-shadow: 2px 2px 4px var(--neumo-shadow-dark), -2px -2px 4px var(--neumo-shadow-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem;
+    }
+    .mnav-item.active {
+      box-shadow: inset 2px 2px 4px var(--neumo-shadow-dark), inset -2px -2px 4px var(--neumo-shadow-light);
+    }
+    .mockup-content { flex: 1; }
+    .mday-header {
+      font-size: 0.7rem; font-weight: 700; color: #4a5568;
+      text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.6rem;
+    }
+    .mtask {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.5rem 0.7rem;
+      background: var(--neumo-bg);
+      border-radius: 10px;
+      box-shadow: 2px 2px 5px var(--neumo-shadow-dark), -2px -2px 5px var(--neumo-shadow-light);
+      margin-bottom: 0.4rem;
+    }
+    .mtask-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .mtask-label { font-size: 0.7rem; color: #2d3748; font-weight: 500; }
+    .mtask-time { font-size: 0.62rem; color: #718096; margin-left: auto; font-weight: 500; }
+    .mstat-row { display: flex; gap: 0.5rem; margin-top: 0.8rem; }
+    .mstat {
+      flex: 1; padding: 0.5rem;
+      background: var(--neumo-bg); border-radius: 10px;
+      box-shadow: 2px 2px 5px var(--neumo-shadow-dark), -2px -2px 5px var(--neumo-shadow-light);
+      text-align: center;
+    }
+    .mstat-val { font-size: 0.95rem; font-weight: 700; color: #2d3748; }
+    .mstat-lbl { font-size: 0.55rem; color: #718096; margin-top: 0.1rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+
+    /* ── STATS STRIP ── */
+    .stats-strip {
+      background: var(--ink);
+      color: #fff;
+      border-top: var(--line) solid var(--ink);
+      border-bottom: var(--line) solid var(--ink);
+      padding: 2.5rem 6%;
+    }
+    .stats-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; gap: 2rem; flex-wrap: wrap; justify-content: space-around;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 2.4rem;
+      letter-spacing: -0.02em;
+      color: var(--yellow);
+    }
+    .stat-item:nth-child(2) .stat-num { color: var(--red); }
+    .stat-item:nth-child(3) .stat-num { color: #fff; }
+    .stat-item:nth-child(4) .stat-num { color: var(--blue); }
+    .stat-item:nth-child(5) .stat-num { color: var(--yellow); }
+    .stat-lbl {
+      font-size: 0.7rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      margin-top: 0.4rem;
+    }
+
+    /* ── CONTENT SECTIONS ── */
+    .content { max-width: 1100px; margin: 0 auto; padding: 0 6%; }
+    section { padding: 5rem 0; }
+    section + section { border-top: var(--line) solid var(--ink); }
+
+    .section-head {
+      display: flex; align-items: center; gap: 0.8rem;
+      margin-bottom: 0.7rem;
+    }
+    .section-marker {
+      width: 22px; height: 22px;
+      background: var(--blue);
+      border: var(--line) solid var(--ink);
+      flex-shrink: 0;
+    }
+    .section-marker.red { background: var(--red); border-radius: 50%; }
+    .section-marker.yellow {
+      background: transparent;
+      border: none;
+      width: 0; height: 0;
+      border-left: 11px solid transparent;
+      border-right: 11px solid transparent;
+      border-bottom: 19px solid var(--yellow);
+      filter: drop-shadow(2px 2px 0 var(--ink));
+    }
+    .section-label {
+      font-size: 0.74rem; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+    }
+    .section-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+      line-height: 1; letter-spacing: -0.01em;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    .section-body {
+      font-size: 1rem;
+      max-width: 640px;
+      font-weight: 500;
+    }
+
+    /* ── TWO-COL ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+    @media(max-width:768px){.two-col{grid-template-columns:1fr}}
+
+    /* ── PAIN LIST ── */
+    .pain-list { list-style: none; margin-top: 1.2rem; display: flex; flex-direction: column; gap: 1rem; }
+    .pain-item {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 1.1rem 1.3rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+      border-left: 8px solid var(--red);
+    }
+    .pain-icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      width: 38px; height: 38px;
+      background: var(--bg);
+      border: var(--line) solid var(--ink);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pain-item p { font-size: 0.9rem; font-weight: 500; }
+    .pain-item strong {
+      display: block; margin-bottom: 0.2rem;
+      font-size: 0.95rem;
+      font-family: 'Archivo Black', sans-serif;
+      letter-spacing: -0.01em;
+    }
+
+    .insight-box {
+      margin-top: 2.5rem;
+      padding: 1.5rem 1.8rem;
+      background: var(--blue);
+      color: #fff;
+      border: var(--line) solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+    }
+    .insight-label {
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 0.6rem;
+    }
+    .insight-box p { font-size: 0.98rem; font-weight: 500; line-height: 1.55; }
+
+    /* ── USER STORIES ── */
+    .stories-grid { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem; }
+    .story-card {
+      padding: 1.1rem 1.3rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+      display: grid; grid-template-columns: auto 1fr auto;
+      align-items: center; gap: 1.2rem;
+    }
+    .story-num {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      background: var(--ink);
+      color: var(--yellow);
+      padding: 0.3rem 0.6rem;
+    }
+    .story-text { font-size: 0.92rem; font-weight: 500; }
+    .story-text strong { font-weight: 700; }
+    .story-priority {
+      font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 0.25rem 0.7rem;
+      white-space: nowrap;
+      border: var(--line) solid var(--ink);
+    }
+    .p-must   { background: var(--red); color: #fff; }
+    .p-should { background: var(--yellow); color: var(--ink); }
+    .p-could  { background: var(--blue); color: #fff; }
+
+    /* ── FEATURES ── */
+    .features-list { display: flex; flex-direction: column; gap: 2rem; margin-top: 2rem; }
+    .feature-block {
+      display: grid; grid-template-columns: 76px 1fr; gap: 1.4rem; align-items: flex-start;
+      padding: 1.5rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+    }
+    @media(max-width:500px){.feature-block{grid-template-columns:1fr}}
+    .feature-icon-wrap {
+      width: 64px; height: 64px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+      background: var(--blue);
+      border: var(--line) solid var(--ink);
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .feature-block:nth-child(2n) .feature-icon-wrap { background: var(--red); }
+    .feature-block:nth-child(3n) .feature-icon-wrap { background: var(--yellow); color: var(--ink); }
+    .feature-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+    .feature-desc { font-size: 0.92rem; margin-bottom: 0.9rem; font-weight: 500; }
+    .feature-why {
+      display: flex; flex-direction: column; gap: 0.3rem;
+      padding: 0.8rem 1rem;
+      background: var(--bg);
+      border: 2px solid var(--ink);
+      border-left: 6px solid var(--blue);
+    }
+    .why-label {
+      font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--blue);
+    }
+    .feature-why p { font-size: 0.86rem; font-weight: 500; }
+
+    /* ── DECISIONS ── */
+    .decisions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 1.5rem; }
+    @media(max-width:600px){.decisions-grid{grid-template-columns:1fr}}
+    .decision-card {
+      padding: 1.4rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .decision-card:hover { transform: translate(-3px,-3px); box-shadow: 6px 6px 0 var(--red); }
+    .decision-what {
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.5rem;
+    }
+    .decision-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1rem; letter-spacing: -0.01em;
+      margin-bottom: 0.7rem;
+    }
+    .decision-vs {
+      display: flex; align-items: center; gap: 0.6rem;
+      font-size: 0.78rem;
+      margin-bottom: 0.7rem;
+    }
+    .opt {
+      padding: 0.25rem 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      border: 2px solid var(--ink);
+    }
+    .opt-chosen { background: var(--yellow); color: var(--ink); }
+    .opt-reject { background: var(--bg); color: var(--ink); text-decoration: line-through; opacity: 0.5; }
+    .vs-arrow { font-weight: 700; font-size: 0.85rem; }
+    .decision-reason { font-size: 0.86rem; font-weight: 500; }
+
+    /* ── METRICS ── */
+    .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; }
+    @media(max-width:600px){.metrics-grid{grid-template-columns:1fr 1fr}}
+    .metric-card {
+      padding: 1.4rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+      text-align: center;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .metric-card:hover { transform: translate(-3px,-3px); box-shadow: 6px 6px 0 var(--blue); }
+    .metric-card:nth-child(3n+2):hover { box-shadow: 6px 6px 0 var(--red); }
+    .metric-card:nth-child(3n):hover   { box-shadow: 6px 6px 0 var(--yellow); }
+    .metric-icon {
+      font-size: 1.6rem;
+      width: 48px; height: 48px;
+      background: var(--bg);
+      border: var(--line) solid var(--ink);
+      margin: 0 auto 0.7rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .metric-name {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 0.85rem; letter-spacing: -0.01em;
+      margin-bottom: 0.4rem;
+    }
+    .metric-desc { font-size: 0.78rem; font-weight: 500; line-height: 1.45; }
+
+    /* ── REFLECTION ── */
+    .reflection-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 1.5rem; }
+    @media(max-width:600px){.reflection-grid{grid-template-columns:1fr}}
+    .reflection-card {
+      padding: 1.6rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+    }
+    .reflection-card.learned { border-top: 12px solid var(--blue); }
+    .reflection-card.next    { border-top: 12px solid var(--red); }
+    .reflection-label {
+      font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      margin-bottom: 0.9rem;
+    }
+    .reflection-card ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .reflection-card li {
+      font-size: 0.88rem;
+      font-weight: 500;
+      display: flex; gap: 0.6rem; align-items: flex-start;
+    }
+    .reflection-card li::before {
+      flex-shrink: 0;
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1rem;
+      line-height: 1;
+      margin-top: 0.15rem;
+    }
+    .learned li::before { content: "✓"; color: var(--blue); }
+    .next li::before    { content: "→"; color: var(--red); }
+
+    /* ── TECH ── */
+    .tech-row { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.2rem; }
+    .tech-pill {
+      font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: var(--yellow);
+      border: var(--line) solid var(--ink);
+      color: var(--ink);
+      padding: 0.4rem 0.85rem;
+    }
+    .tech-pill:nth-child(2n) { background: var(--bg); }
+    .tech-pill:nth-child(3n) { background: var(--blue); color: #fff; }
+
+    /* ── TIMELINE ── */
+    .timeline { display: flex; flex-direction: column; margin-top: 1.5rem; }
+    .tl-item { display: flex; gap: 1.2rem; }
+    .tl-left { display: flex; flex-direction: column; align-items: center; width: 36px; flex-shrink: 0; }
+    .tl-dot {
+      width: 18px; height: 18px;
+      border: var(--line) solid var(--ink);
+      background: var(--bg);
+      flex-shrink: 0;
+      position: relative; z-index: 1;
+    }
+    .tl-dot.done { background: var(--red); }
+    .tl-line { flex: 1; width: 4px; background: var(--ink); margin: 0 auto; }
+    .tl-content { padding-bottom: 2rem; flex: 1; }
+    .tl-phase {
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.3rem;
+    }
+    .tl-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1rem; letter-spacing: -0.01em;
+      margin-bottom: 0.3rem;
+    }
+    .tl-desc { font-size: 0.86rem; font-weight: 500; }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: var(--ink);
+      border-top: var(--line) solid var(--ink);
+    }
+    .cta-box {
+      max-width: 700px; margin: 0 auto;
+      text-align: center;
+      padding: 5rem 6%;
+      color: #fff;
+    }
+    .cta-box h2 {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 2rem;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+      color: #fff;
+    }
+    .cta-box p { margin-bottom: 2rem; font-weight: 500; color: #d8d4cc; }
+    .cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; padding: 1.8rem;
+      font-size: 0.74rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      border-top: var(--line) solid var(--ink);
+      background: var(--bg);
+    }
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+      border-bottom: 2px solid var(--blue);
+    }
+
+    code {
+      background: var(--yellow);
+      border: 2px solid var(--ink);
+      padding: 1px 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85em;
+      font-weight: 700;
+    }
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+      Back
+    </a>
+    <div class="nav-logo"><span class="dot"></span>HUI WANG</div>
+    <div class="nav-status"><div class="status-dot"></div>Live</div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <span class="geo geo-circle"></span>
+    <span class="geo geo-square"></span>
+    <span class="geo geo-triangle"></span>
+    <span class="geo-line-h"></span>
+    <span class="geo-dot"></span>
+
+    <div class="hero-inner">
+      <div>
+        <div class="hero-eyebrow">⚡ Case Study · Productivity App</div>
+        <h1 class="hero-title">Pulse<br>Plan<span class="accent">.</span></h1>
+        <p class="hero-tagline">
+          An intelligent planning companion that unifies daily tasks, yearly goals,
+          event discovery, and visual learning progress — built to reduce
+          the friction of managing an ambitious life.
+        </p>
+        <div class="hero-cta">
+          <a href="#problem" class="btn btn-primary">Read Case →</a>
+          <a href="index.html#contact" class="btn btn-outline">Get in Touch</a>
+        </div>
+      </div>
+
+      <!-- App Mockup (Neumorphism preserved — represents the actual app) -->
+      <div class="hero-visual">
+        <div class="mockup-bar">
+          <div class="mockup-dot" style="background:var(--red)"></div>
+          <div class="mockup-dot" style="background:var(--yellow)"></div>
+          <div class="mockup-dot" style="background:var(--blue)"></div>
+          <span class="mockup-title">localhost:3000</span>
+        </div>
+        <div class="mockup-screen">
+          <div class="mockup-sidebar">
+            <div class="mockup-nav">
+              <div class="mnav-item active">🏠</div>
+              <div class="mnav-item">📅</div>
+              <div class="mnav-item">🎯</div>
+              <div class="mnav-item">🗺️</div>
+              <div class="mnav-item">🌐</div>
+            </div>
+            <div class="mockup-content">
+              <div class="mday-header">Today — Apr 20</div>
+              <div class="mtask"><div class="mtask-dot" style="background:#10b981"></div><span class="mtask-label">Morning run</span><span class="mtask-time">07:00</span></div>
+              <div class="mtask"><div class="mtask-dot" style="background:#3b82f6"></div><span class="mtask-label">Review OKRs</span><span class="mtask-time">10:00</span></div>
+              <div class="mtask"><div class="mtask-dot" style="background:#8b5cf6"></div><span class="mtask-label">Read 30 pages</span><span class="mtask-time">13:00</span></div>
+              <div class="mtask"><div class="mtask-dot" style="background:#ec4899"></div><span class="mtask-label">Dinner w/ friends</span><span class="mtask-time">19:00</span></div>
+              <div class="mstat-row">
+                <div class="mstat"><div class="mstat-val">1/4</div><div class="mstat-lbl">Done</div></div>
+                <div class="mstat"><div class="mstat-val">3</div><div class="mstat-lbl">Goals</div></div>
+                <div class="mstat"><div class="mstat-val">2</div><div class="mstat-lbl">New</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS STRIP -->
+  <div class="stats-strip">
+    <div class="stats-inner">
+      <div class="stat-item"><div class="stat-num">8</div><div class="stat-lbl">Core Features</div></div>
+      <div class="stat-item"><div class="stat-num">2</div><div class="stat-lbl">Dev Phases</div></div>
+      <!-- PP_STATS_START -->
+      <div class="stat-item"><div class="stat-num">v1.2</div><div class="stat-lbl">Current Version</div></div>
+      <!-- PP_STATS_END -->
+      <div class="stat-item"><div class="stat-num">1</div><div class="stat-lbl">User (me)</div></div>
+      <div class="stat-item"><div class="stat-num">0</div><div class="stat-lbl">Graph Libraries</div></div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- PROBLEM -->
+    <section id="problem">
+      <div class="two-col">
+        <div>
+          <div class="section-head reveal"><span class="section-marker red"></span><p class="section-label">01 · The Problem</p></div>
+          <h2 class="section-title reveal">My planning life was scattered across 5 apps</h2>
+          <p class="section-body reveal">
+            As someone managing a job search, a Master's thesis, fitness goals,
+            and a side project simultaneously, I found myself constantly
+            context-switching — checking Notion for goals, Google Calendar
+            for schedule, browser bookmarks for events, and a notes app
+            for reflections. Nothing talked to each other.
+          </p>
+        </div>
+        <div>
+          <ul class="pain-list">
+            <li class="pain-item reveal">
+              <span class="pain-icon">📭</span>
+              <div>
+                <strong>No unified command center</strong>
+                <p>Daily tasks, yearly goals, and discovery lived in separate apps with no connection between them.</p>
+              </div>
+            </li>
+            <li class="pain-item reveal">
+              <span class="pain-icon">🔀</span>
+              <div>
+                <strong>Context-switching overhead</strong>
+                <p>Deciding whether to attend an event required opening 3 apps to check schedule, goals, and energy levels.</p>
+              </div>
+            </li>
+            <li class="pain-item reveal">
+              <span class="pain-icon">🧠</span>
+              <div>
+                <strong>No visibility on learning progress</strong>
+                <p>Goals like "complete IBM certificate" or "finish thesis" had no visual progress tracking tied to daily actions.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="insight-box reveal">
+        <div class="insight-label">Core Job-to-be-Done</div>
+        <p>"When I wake up or check my phone between tasks, I want to immediately know what I should do next — without mentally stitching together information from five different places."</p>
+      </div>
+    </section>
+
+    <!-- USER STORIES -->
+    <section>
+      <div class="section-head reveal"><span class="section-marker"></span><p class="section-label">02 · Product Thinking</p></div>
+      <h2 class="section-title reveal">User stories that drove prioritization</h2>
+      <p class="section-body reveal">I wrote user stories from my own perspective first, then categorized them using MoSCoW to define the MVP scope.</p>
+      <div class="stories-grid">
+        <div class="story-card reveal">
+          <span class="story-num">US-01</span>
+          <span class="story-text"><strong>As a user</strong>, I want to see all my tasks for today in one view so I can start my day with clarity.</span>
+          <span class="story-priority p-must">Must</span>
+        </div>
+        <div class="story-card reveal">
+          <span class="story-num">US-02</span>
+          <span class="story-text"><strong>As a user</strong>, I want to paste an event URL and get a decision card (add/ignore) so I can process new activities without leaving the app.</span>
+          <span class="story-priority p-must">Must</span>
+        </div>
+        <div class="story-card reveal">
+          <span class="story-num">US-03</span>
+          <span class="story-text"><strong>As a user</strong>, I want the app to learn my preferences so it can recommend activities similar to ones I've accepted before.</span>
+          <span class="story-priority p-should">Should</span>
+        </div>
+        <div class="story-card reveal">
+          <span class="story-num">US-04</span>
+          <span class="story-text"><strong>As a user</strong>, I want to see my learning goals as a visual map so I can feel the structure and progress of what I'm studying.</span>
+          <span class="story-priority p-could">Could</span>
+        </div>
+        <div class="story-card reveal">
+          <span class="story-num">US-05</span>
+          <span class="story-text"><strong>As a user</strong>, I want to break yearly goals into milestones and see percentage completion so I don't lose sight of the big picture.</span>
+          <span class="story-priority p-should">Should</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ROADMAP -->
+    <section>
+      <div class="section-head reveal"><span class="section-marker yellow"></span><p class="section-label">03 · Execution</p></div>
+      <h2 class="section-title reveal">Shipped in two phases</h2>
+      <p class="section-body reveal">I intentionally scoped Phase 1 to the two highest-friction problems — daily planning and event discovery — before building the more exploratory Phase 2 features.</p>
+      <div class="two-col" style="margin-top:2rem">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot done"></div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-phase reveal">Phase 1 · MVP</div>
+              <div class="tl-title reveal">Daily Calendar + Web Scraper</div>
+              <div class="tl-desc reveal">Built the month-view calendar, task CRUD, and the full scraper decision flow. Established localStorage persistence and Zustand state management.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot done"></div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-phase reveal">Phase 1 · Extension</div>
+              <div class="tl-title reveal">Smart Suggestion Engine</div>
+              <div class="tl-desc reveal">Added behavioral data tracking — accept/ignore actions are stored per category and used to surface recommendation reasons on future scrapes.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot done"></div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-phase reveal">Phase 2</div>
+              <div class="tl-title reveal">Yearly Goals + Visual Mind Map</div>
+              <div class="tl-desc reveal">Added the goal tracker with milestone checklists and built the interactive SVG mind map from scratch — no graph library used.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div></div>
+            <div class="tl-content">
+              <div class="tl-phase reveal">Phase 3 · Planned</div>
+              <div class="tl-title reveal">Cloud Sync + AI Integration</div>
+              <div class="tl-desc reveal">Cross-device sync via Supabase, AI-powered daily plan generation, and real web scraping replacing the current mock.</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="section-head reveal" style="margin-top:0"><span class="section-marker"></span><p class="section-label">Key Decisions</p></div>
+          <div class="decisions-grid" style="grid-template-columns:1fr; margin-top:1rem">
+            <div class="decision-card reveal">
+              <div class="decision-what">Decision 01</div>
+              <div class="decision-title">Database: Local vs. Cloud</div>
+              <div class="decision-vs">
+                <span class="opt opt-chosen">localStorage</span>
+                <span class="vs-arrow">VS</span>
+                <span class="opt opt-reject">Supabase</span>
+              </div>
+              <p class="decision-reason">Chose localStorage to ship faster with zero auth complexity. The real product need (persistence) is met; cloud sync is a Phase 3 enhancement.</p>
+            </div>
+            <div class="decision-card reveal">
+              <div class="decision-what">Decision 02</div>
+              <div class="decision-title">Mind Map: Library vs. Custom SVG</div>
+              <div class="decision-vs">
+                <span class="opt opt-chosen">Custom SVG</span>
+                <span class="vs-arrow">VS</span>
+                <span class="opt opt-reject">D3 / Cytoscape</span>
+              </div>
+              <p class="decision-reason">Custom SVG gave full control over the progress ring animation and interaction model. The constraint forced a deeper understanding of what the feature actually needs.</p>
+            </div>
+            <div class="decision-card reveal">
+              <div class="decision-what">Decision 03</div>
+              <div class="decision-title">Scraper: Mock vs. Real</div>
+              <div class="decision-vs">
+                <span class="opt opt-chosen">Mock scraper</span>
+                <span class="vs-arrow">VS</span>
+                <span class="opt opt-reject">Real HTTP fetch</span>
+              </div>
+              <p class="decision-reason">A real scraper requires a backend proxy to bypass CORS. The mock validates the entire UX flow and decision logic — the right thing to prove in a prototype.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section>
+      <div class="section-head reveal"><span class="section-marker red"></span><p class="section-label">04 · Features</p></div>
+      <h2 class="section-title reveal">What was built, and why</h2>
+      <!-- PP_FEATURES_START -->
+      <div class="features-list">
+        <div class="feature-block reveal">
+          <div class="feature-icon-wrap">📅</div>
+          <div>
+            <div class="feature-title">Daily Calendar + Timeline View</div>
+            <p class="feature-desc">Month-view calendar with color-coded task dots. Day view toggles between a task list and an hour-by-hour timeline (6:00–24:00) showing scheduled blocks and free slots at a glance. Full task CRUD with inline edit, time, duration, priority, and category fields.</p>
+            <div class="feature-why"><div class="why-label">PM Rationale</div><p>The timeline view answers the question "when am I free?" directly — the absence of blocks is as informative as the blocks themselves. Toggling between list and timeline serves two mental modes: planning and scheduling.</p></div>
+          </div>
+        </div>
+        <div class="feature-block reveal">
+          <div class="feature-icon-wrap">🌐</div>
+          <div>
+            <div class="feature-title">Web Scraper &amp; Action Center</div>
+            <p class="feature-desc">Paste any event URL — the app simulates extracting activities and presents them as decision cards with an Accept or Ignore binary choice. Accepted items go directly into the daily plan.</p>
+            <div class="feature-why"><div class="why-label">PM Rationale</div><p>The key insight: the bottleneck isn't finding events, it's deciding quickly. The two-button decision flow reduces cognitive load to a binary choice, removing the "I'll do it later" trap.</p></div>
+          </div>
+        </div>
+        <div class="feature-block reveal">
+          <div class="feature-icon-wrap">✨</div>
+          <div>
+            <div class="feature-title">Smart Suggestion Engine</div>
+            <p class="feature-desc">Behavioral learning loop — every accept/ignore action is stored per category. On future scrapes, the system surfaces a "recommendation reason" if the activity matches a user's historical preferences.</p>
+            <div class="feature-why"><div class="why-label">PM Rationale</div><p>This is the data flywheel: more usage → better signals → better recommendations → more value → more usage. Even with simple logic, it demonstrates the personalization principle central to modern productivity products.</p></div>
+          </div>
+        </div>
+        <div class="feature-block reveal">
+          <div class="feature-icon-wrap">🗺️</div>
+          <div>
+            <div class="feature-title">Visual Mind Map</div>
+            <p class="feature-desc">Interactive SVG node map with animated progress rings (stroke-dasharray technique), zoom/pan canvas, radial layout algorithm, and click-to-expand subtask detail panel — zero external graph libraries.</p>
+            <div class="feature-why"><div class="why-label">PM Rationale</div><p>Linear lists make learning goals feel like tasks. The spatial, radial map activates a different mental model — you see relationships and structure, not just checkboxes. Progress rings give emotional feedback at a glance.</p></div>
+          </div>
+        </div>
+        <div class="feature-block reveal">
+          <div class="feature-icon-wrap">🎯</div>
+          <div>
+            <div class="feature-title">Yearly Goal Tracker</div>
+            <p class="feature-desc">Goal cards with category, target date, description, and milestone checklists. Completing milestones auto-calculates overall goal progress percentage. Full inline edit and delete on every goal and milestone.</p>
+            <div class="feature-why"><div class="why-label">PM Rationale</div><p>Most goal apps fail because goals aren't connected to daily behavior. This tracker sits in the same app as the daily calendar — creating a natural loop between "what do I do today" and "why am I doing it."</p></div>
+          </div>
+        </div>
+        <div class="feature-block reveal">
+          <div class="feature-icon-wrap">🔒</div>
+          <div>
+            <div class="feature-title">Privacy-First Share View</div>
+            <p class="feature-desc">A dedicated <code>/share</code> route renders the same calendar data with all task details stripped — every block appears as "Booked" with only the time slot visible. Designed for sharing availability without exposing personal details.</p>
+            <div class="feature-why"><div class="why-label">PM Rationale</div><p>Sharing a calendar is a social act; sharing what's inside is a privacy risk. Separating the two mirrors how enterprise calendar tools handle free/busy access control, and sets up a clean boundary for Phase 3 multi-user sync.</p></div>
+          </div>
+        </div>
+        <div class="feature-block reveal">
+          <div class="feature-icon-wrap">🗑️</div>
+          <div>
+            <div class="feature-title">Trash &amp; Restore</div>
+            <p class="feature-desc">Deleting a task or goal moves it to a dedicated Trash page instead of permanent removal. Items can be restored to their original state or permanently deleted. Sidebar badge shows the current trash count.</p>
+            <div class="feature-why"><div class="why-label">PM Rationale</div><p>Destructive actions without undo are a trust liability — one accidental delete erodes confidence in the whole system. The two-step trash pattern (soft delete → explicit purge) is the industry standard for a reason: it makes users feel safe to act quickly.</p></div>
+          </div>
+        </div>
+      </div>
+      <!-- PP_FEATURES_END -->
+    </section>
+
+    <!-- METRICS -->
+    <section>
+      <div class="section-head reveal"><span class="section-marker"></span><p class="section-label">05 · If This Were a Real Product</p></div>
+      <h2 class="section-title reveal">What I'd measure</h2>
+      <p class="section-body reveal">As a PM, shipping isn't the end — it's the beginning. Here are the metrics I'd track post-launch to validate whether Pulse Plan is actually reducing planning friction.</p>
+      <div class="metrics-grid">
+        <div class="metric-card reveal"><div class="metric-icon">📊</div><div class="metric-name">Daily Active Rate</div><p class="metric-desc">Are users returning every day? Planning tools only have value if they're habitual. Target: 60% D7 retention.</p></div>
+        <div class="metric-card reveal"><div class="metric-icon">✅</div><div class="metric-name">Task Completion Rate</div><p class="metric-desc">Percentage of daily tasks marked done. The core proxy for whether the app is helping users follow through.</p></div>
+        <div class="metric-card reveal"><div class="metric-icon">⚡</div><div class="metric-name">Scraper Accept Rate</div><p class="metric-desc">What % of scraped activities get added to the plan? Rising rate over time validates the suggestion engine is learning.</p></div>
+        <div class="metric-card reveal"><div class="metric-icon">🗺️</div><div class="metric-name">Mind Map Node Depth</div><p class="metric-desc">Average subtasks per node. Depth signals that users are investing in the tool for real learning goals, not just exploration.</p></div>
+        <div class="metric-card reveal"><div class="metric-icon">🎯</div><div class="metric-name">Milestone Velocity</div><p class="metric-desc">Rate at which users complete milestones over time. A flattening curve would signal that goal-setting is too ambitious or unclear.</p></div>
+        <div class="metric-card reveal"><div class="metric-icon">🔗</div><div class="metric-name">Cross-feature Usage</div><p class="metric-desc">% of users who use 3+ features. The app's value compounds when features interact — this measures whether the "unified" premise actually holds.</p></div>
+      </div>
+    </section>
+
+    <!-- TECH -->
+    <section>
+      <div class="section-head reveal"><span class="section-marker yellow"></span><p class="section-label">06 · Tech Stack</p></div>
+      <h2 class="section-title reveal">Built to be production-ready from day one</h2>
+      <p class="section-body reveal">Chose tools that reflect modern frontend standards — not just to ship a prototype, but to demonstrate that technical decisions serve product goals.</p>
+      <!-- PP_TECH_START -->
+      <div class="tech-row">
+        <span class="tech-pill">Next.js 14</span>
+        <span class="tech-pill">React</span>
+        <span class="tech-pill">Tailwind CSS</span>
+        <span class="tech-pill">Zustand</span>
+        <span class="tech-pill">SVG Canvas</span>
+        <span class="tech-pill">date-fns</span>
+        <span class="tech-pill">framer-motion</span>
+      </div>
+      <!-- PP_TECH_END -->
+    </section>
+
+    <!-- REFLECTION -->
+    <section>
+      <div class="section-head reveal"><span class="section-marker red"></span><p class="section-label">07 · Reflection</p></div>
+      <h2 class="section-title reveal">What I learned, and what comes next</h2>
+      <!-- PP_REFLECTION_START -->
+      <div class="reflection-grid">
+        <div class="reflection-card learned reveal">
+          <div class="reflection-label" style="color:var(--blue)">✓ What I Learned</div>
+          <ul>
+            <li>Scoping the MVP strictly to must-haves made Phase 1 shippable in days instead of weeks.</li>
+            <li>Writing user stories first — even for a solo project — forced clarity on what "done" looks like.</li>
+            <li>A behavioral data loop doesn't need ML to be valuable; even simple counters create meaningful personalization signals.</li>
+            <li>Building the mind map from scratch was harder but taught me that constraints drive creative solutions.</li>
+            <li>HCI background made me obsess over interaction feedback — every button needed a state transition, every action needed a visual response.</li>
+            <li>A timeline view and a list view serve different mental modes — giving users both costs one toggle and removes a whole category of friction.</li>
+            <li>Soft-delete (trash) is a trust feature, not just a safety net. Users act more confidently when they know actions are reversible.</li>
+            <li>Designing a privacy boundary early (share view showing only "Booked") made the architecture cleaner for future multi-user sync.</li>
+          </ul>
+        </div>
+        <div class="reflection-card next reveal">
+          <div class="reflection-label" style="color:var(--red)">→ What I'd Do Next</div>
+          <ul>
+            <li>Interview 5 other students about their planning pain points before building Phase 3 — I may be solving for myself, not a broader segment.</li>
+            <li>Replace the mock scraper with a real backend proxy and test against actual event sites (Eventbrite, Meetup, lu.ma).</li>
+            <li>Add Supabase for cloud sync — the #1 blocker for real daily use is being tied to one device. The share view is already architected for this.</li>
+            <li>A/B test the scraper decision card layout — does showing the recommendation reason before or after the title affect accept rate?</li>
+            <li>Build a weekly review flow: what did you plan vs. what did you do? Closing the feedback loop is where planning tools earn long-term trust.</li>
+            <li>Auto-expire trash after 30 days — mirrors the behavior users expect from tools like Notion and Gmail, reducing mental overhead.</li>
+          </ul>
+        </div>
+      </div>
+      <!-- PP_REFLECTION_END -->
+    </section>
+
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <div class="cta-box">
+      <h2 class="reveal">Want to talk about it?</h2>
+      <p class="reveal">Happy to walk through the product thinking, the trade-offs, or anything from the case above.</p>
+      <div class="cta-buttons reveal">
+        <a href="index.html#contact" class="btn btn-blue">Get in Touch</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Hui Wang · Pulse Plan Case Study · <a href="index.html">Back to Portfolio</a></p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver(
+      entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') }),
+      { threshold: 0.08 }
+    )
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el))
+  </script>
+
+</body>
+</html>

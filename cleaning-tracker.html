@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cleaning Tracker — Case Study · Hui Wang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Archivo+Black&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #F5F0E8;
+      --ink: #1A1A1A;
+      --red: #E63946;
+      --blue: #2D5FD8;
+      --yellow: #FFD43B;
+      --line: 2.5px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+    a { color: inherit; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 6%;
+      background: var(--bg);
+      border-bottom: var(--line) solid var(--ink);
+    }
+    .nav-back {
+      display: flex; align-items: center; gap: 0.4rem;
+      text-decoration: none;
+      font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding-bottom: 4px;
+      position: relative;
+    }
+    .nav-back::after {
+      content: ''; position: absolute; left: 0; bottom: 0;
+      width: 0; height: 3px; background: var(--blue);
+      transition: width 0.2s;
+    }
+    .nav-back:hover::after { width: 100%; }
+    .nav-back svg { width: 14px; height: 14px; }
+    .nav-logo {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1rem; letter-spacing: 0.06em;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .nav-logo .dot {
+      width: 12px; height: 12px;
+      background: var(--red);
+    }
+    .nav-status {
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--ink);
+      background: var(--yellow);
+      border: var(--line) solid var(--ink);
+      padding: 0.3rem 0.7rem;
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .status-dot {
+      width: 8px; height: 8px; background: var(--red);
+      animation: blink 1.4s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 8rem 6% 5rem;
+      position: relative; overflow: hidden;
+    }
+    .geo {
+      position: absolute;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .geo-circle {
+      width: 220px; height: 220px;
+      background: var(--blue);
+      border: var(--line) solid var(--ink);
+      border-radius: 50%;
+      top: 10%; right: -60px;
+    }
+    .geo-square {
+      width: 100px; height: 100px;
+      background: var(--yellow);
+      border: var(--line) solid var(--ink);
+      bottom: 12%; left: 4%;
+      transform: rotate(-12deg);
+    }
+    .geo-triangle {
+      width: 0; height: 0;
+      border-left: 50px solid transparent;
+      border-right: 50px solid transparent;
+      border-bottom: 86px solid var(--red);
+      filter: drop-shadow(2.5px 2.5px 0 var(--ink));
+      bottom: 30%; right: 8%;
+    }
+    .geo-line-h {
+      position: absolute;
+      height: 4px;
+      width: 90px;
+      background: var(--ink);
+      top: 22%; left: 4%;
+    }
+    .geo-dot {
+      position: absolute;
+      width: 14px; height: 14px;
+      background: var(--red);
+      border-radius: 50%;
+      top: 30%; left: 12%;
+    }
+
+    .hero-inner {
+      position: relative; z-index: 1;
+      max-width: 1100px; width: 100%;
+      margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    }
+    @media(max-width:768px){.hero-inner{grid-template-columns:1fr;gap:2.5rem}}
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--ink);
+      background: var(--yellow);
+      border: var(--line) solid var(--ink);
+      padding: 0.4rem 0.9rem;
+      margin-bottom: 1.6rem;
+    }
+    .hero-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(2.6rem, 6vw, 4.8rem);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.2rem;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+    .hero-title .accent { color: var(--red); }
+    .hero-tagline {
+      font-size: 1.05rem;
+      margin-bottom: 2rem;
+      max-width: 460px;
+      font-weight: 500;
+    }
+    .hero-cta { display: flex; gap: 0.9rem; flex-wrap: wrap; }
+    .btn {
+      padding: 0.85rem 1.7rem;
+      font-size: 0.85rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      text-decoration: none;
+      border: var(--line) solid var(--ink);
+      transition: transform 0.15s, box-shadow 0.15s;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      cursor: pointer;
+      background: var(--bg); color: var(--ink);
+    }
+    .btn-primary { background: var(--yellow); }
+    .btn-primary:hover { transform: translate(-3px,-3px); box-shadow: 6px 6px 0 var(--ink); }
+    .btn-outline { background: var(--bg); }
+    .btn-outline:hover { transform: translate(-3px,-3px); box-shadow: 6px 6px 0 var(--blue); }
+    .btn-blue { background: var(--blue); color: #fff; }
+    .btn-blue:hover { transform: translate(-3px,-3px); box-shadow: 6px 6px 0 var(--ink); }
+
+    /* ── HERO MOCKUP — Receipt → Items flow ── */
+    .hero-visual {
+      background: var(--bg);
+      border: var(--line) solid var(--ink);
+      padding: 1rem;
+      box-shadow: 8px 8px 0 var(--ink);
+    }
+    .mockup-bar {
+      display: flex; align-items: center; gap: 0.4rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 2px solid var(--ink);
+      margin-bottom: 1rem;
+    }
+    .mockup-dot { width: 11px; height: 11px; border: 2px solid var(--ink); }
+    .mockup-title { font-size: 0.72rem; font-weight: 600; color: var(--ink); margin-left: auto; letter-spacing: 0.05em; }
+
+    .hero-shot {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 2px solid var(--ink);
+    }
+
+    /* ── WALKTHROUGH (GIFs) ── */
+    .walkthrough-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      margin-top: 1.6rem;
+    }
+    .walk-card {
+      background: #fff;
+      border: var(--line) solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+      overflow: hidden;
+    }
+    .walk-shot {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-bottom: var(--line) solid var(--ink);
+      background: var(--bg);
+    }
+    .walk-meta { padding: 1rem 1.2rem; }
+    .walk-tag {
+      display: inline-block;
+      font-size: 0.66rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      background: var(--blue); color: #fff;
+      padding: 0.25rem 0.6rem;
+      border: 2px solid var(--ink);
+      margin-bottom: 0.5rem;
+    }
+    .walk-card:nth-child(2) .walk-tag { background: var(--red); }
+    .walk-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1rem; letter-spacing: -0.01em;
+      margin-bottom: 0.35rem;
+    }
+    .walk-desc { font-size: 0.86rem; font-weight: 500; }
+
+    .mockup-flow { display: grid; grid-template-columns: 0.85fr auto 1.15fr; gap: 0.6rem; align-items: stretch; }
+    @media(max-width:520px){.mockup-flow{grid-template-columns:1fr;gap:0.4rem}}
+
+    .receipt {
+      background: #fff;
+      border: 2px solid var(--ink);
+      padding: 0.7rem 0.6rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.62rem;
+      line-height: 1.5;
+      color: #2d3748;
+    }
+    .receipt-head {
+      font-weight: 700;
+      text-align: center;
+      border-bottom: 1px dashed #2d3748;
+      padding-bottom: 0.3rem;
+      margin-bottom: 0.4rem;
+      font-size: 0.62rem;
+    }
+    .receipt-line { display: flex; justify-content: space-between; }
+    .receipt-foot {
+      border-top: 1px dashed #2d3748;
+      margin-top: 0.3rem;
+      padding-top: 0.3rem;
+      font-weight: 700;
+      display: flex; justify-content: space-between;
+    }
+
+    .arrow-col {
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1.3rem;
+      color: var(--red);
+    }
+    @media(max-width:520px){.arrow-col{transform:rotate(90deg);padding:0.3rem 0}}
+
+    .extracted {
+      background: #fff;
+      border: 2px solid var(--ink);
+      padding: 0.6rem;
+      display: flex; flex-direction: column; gap: 0.35rem;
+    }
+    .extracted-title {
+      font-size: 0.6rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--ink);
+      margin-bottom: 0.2rem;
+    }
+    .item-row {
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 0.4rem;
+      align-items: center;
+      padding: 0.3rem 0.4rem;
+      background: var(--bg);
+      border: 1.5px solid var(--ink);
+      font-size: 0.62rem;
+    }
+    .item-name { font-weight: 600; color: #1a1a1a; }
+    .item-cat {
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 0.1rem 0.4rem;
+      background: var(--yellow);
+      border: 1.5px solid var(--ink);
+      white-space: nowrap;
+    }
+    .item-row:nth-child(2n) .item-cat { background: var(--blue); color: #fff; }
+    .item-row:nth-child(3n) .item-cat { background: var(--red); color: #fff; }
+
+    /* ── STATS STRIP ── */
+    .stats-strip {
+      background: var(--ink);
+      color: #fff;
+      border-top: var(--line) solid var(--ink);
+      border-bottom: var(--line) solid var(--ink);
+      padding: 2.5rem 6%;
+    }
+    .stats-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; gap: 2rem; flex-wrap: wrap; justify-content: space-around;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 2.4rem;
+      letter-spacing: -0.02em;
+      color: var(--yellow);
+    }
+    .stat-item:nth-child(2) .stat-num { color: var(--red); }
+    .stat-item:nth-child(3) .stat-num { color: #fff; }
+    .stat-item:nth-child(4) .stat-num { color: var(--blue); }
+    .stat-lbl {
+      font-size: 0.7rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      margin-top: 0.4rem;
+    }
+
+    /* ── CONTENT SECTIONS ── */
+    .content { max-width: 1100px; margin: 0 auto; padding: 0 6%; }
+    section { padding: 5rem 0; }
+    section + section { border-top: var(--line) solid var(--ink); }
+
+    .section-head {
+      display: flex; align-items: center; gap: 0.8rem;
+      margin-bottom: 0.7rem;
+    }
+    .section-marker {
+      width: 22px; height: 22px;
+      background: var(--blue);
+      border: var(--line) solid var(--ink);
+      flex-shrink: 0;
+    }
+    .section-marker.red { background: var(--red); border-radius: 50%; }
+    .section-marker.yellow {
+      background: transparent;
+      border: none;
+      width: 0; height: 0;
+      border-left: 11px solid transparent;
+      border-right: 11px solid transparent;
+      border-bottom: 19px solid var(--yellow);
+      filter: drop-shadow(2px 2px 0 var(--ink));
+    }
+    .section-label {
+      font-size: 0.74rem; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+    }
+    .section-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+      line-height: 1; letter-spacing: -0.01em;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    .section-body {
+      font-size: 1rem;
+      max-width: 640px;
+      font-weight: 500;
+    }
+
+    /* ── TWO-COL ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+    @media(max-width:768px){.two-col{grid-template-columns:1fr}}
+
+    /* ── PAIN LIST ── */
+    .pain-list { list-style: none; margin-top: 1.2rem; display: flex; flex-direction: column; gap: 0.9rem; }
+    .pain-item {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 1rem 1.2rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+      border-left: 8px solid var(--red);
+    }
+    .pain-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      width: 36px; height: 36px;
+      background: var(--bg);
+      border: var(--line) solid var(--ink);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pain-item p { font-size: 0.88rem; font-weight: 500; }
+    .pain-item strong {
+      display: block; margin-bottom: 0.15rem;
+      font-size: 0.92rem;
+      font-family: 'Archivo Black', sans-serif;
+      letter-spacing: -0.01em;
+    }
+
+    .insight-box {
+      margin-top: 2.2rem;
+      padding: 1.4rem 1.7rem;
+      background: var(--blue);
+      color: #fff;
+      border: var(--line) solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+    }
+    .insight-label {
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 0.5rem;
+    }
+    .insight-box p { font-size: 0.96rem; font-weight: 500; line-height: 1.55; }
+
+    /* ── FEATURES ── */
+    .features-list { display: flex; flex-direction: column; gap: 1.4rem; margin-top: 1.6rem; }
+    .feature-block {
+      display: grid; grid-template-columns: 64px 1fr; gap: 1.2rem; align-items: flex-start;
+      padding: 1.3rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+    }
+    @media(max-width:500px){.feature-block{grid-template-columns:1fr}}
+    .feature-icon-wrap {
+      width: 56px; height: 56px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+      background: var(--blue);
+      border: var(--line) solid var(--ink);
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .feature-block:nth-child(2n) .feature-icon-wrap { background: var(--red); }
+    .feature-block:nth-child(3n) .feature-icon-wrap { background: var(--yellow); color: var(--ink); }
+    .feature-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1.05rem;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.4rem;
+    }
+    .feature-desc { font-size: 0.9rem; margin-bottom: 0.7rem; font-weight: 500; }
+    .feature-why {
+      display: flex; flex-direction: column; gap: 0.25rem;
+      padding: 0.7rem 0.9rem;
+      background: var(--bg);
+      border: 2px solid var(--ink);
+      border-left: 6px solid var(--blue);
+    }
+    .why-label {
+      font-size: 0.66rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--blue);
+    }
+    .feature-why p { font-size: 0.84rem; font-weight: 500; }
+
+    /* ── DECISIONS ── */
+    .decisions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 1.5rem; }
+    @media(max-width:600px){.decisions-grid{grid-template-columns:1fr}}
+    .decision-card {
+      padding: 1.4rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .decision-card:hover { transform: translate(-3px,-3px); box-shadow: 6px 6px 0 var(--red); }
+    .decision-what {
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.5rem;
+    }
+    .decision-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1rem; letter-spacing: -0.01em;
+      margin-bottom: 0.7rem;
+    }
+    .decision-vs {
+      display: flex; align-items: center; gap: 0.6rem;
+      font-size: 0.78rem;
+      margin-bottom: 0.7rem;
+      flex-wrap: wrap;
+    }
+    .opt {
+      padding: 0.25rem 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      border: 2px solid var(--ink);
+    }
+    .opt-chosen { background: var(--yellow); color: var(--ink); }
+    .opt-reject { background: var(--bg); color: var(--ink); text-decoration: line-through; opacity: 0.5; }
+    .vs-arrow { font-weight: 700; font-size: 0.85rem; }
+    .decision-reason { font-size: 0.86rem; font-weight: 500; }
+
+    /* ── METRICS ── */
+    .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 1.5rem; }
+    @media(max-width:780px){.metrics-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:420px){.metrics-grid{grid-template-columns:1fr}}
+    .metric-card {
+      padding: 1.3rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+      text-align: center;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .metric-card:hover { transform: translate(-3px,-3px); box-shadow: 6px 6px 0 var(--blue); }
+    .metric-card:nth-child(3n+2):hover { box-shadow: 6px 6px 0 var(--red); }
+    .metric-card:nth-child(3n):hover   { box-shadow: 6px 6px 0 var(--yellow); }
+    .metric-icon {
+      font-size: 1.5rem;
+      width: 44px; height: 44px;
+      background: var(--bg);
+      border: var(--line) solid var(--ink);
+      margin: 0 auto 0.6rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .metric-name {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 0.82rem; letter-spacing: -0.01em;
+      margin-bottom: 0.35rem;
+    }
+    .metric-desc { font-size: 0.76rem; font-weight: 500; line-height: 1.45; }
+
+    /* ── TECH ── */
+    .tech-row { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.2rem; }
+    .tech-pill {
+      font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: var(--yellow);
+      border: var(--line) solid var(--ink);
+      color: var(--ink);
+      padding: 0.4rem 0.85rem;
+    }
+    .tech-pill:nth-child(2n) { background: var(--bg); }
+    .tech-pill:nth-child(3n) { background: var(--blue); color: #fff; }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: var(--ink);
+      border-top: var(--line) solid var(--ink);
+    }
+    .cta-box {
+      max-width: 700px; margin: 0 auto;
+      text-align: center;
+      padding: 5rem 6%;
+      color: #fff;
+    }
+    .cta-box h2 {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 2rem;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+      color: #fff;
+    }
+    .cta-box p { margin-bottom: 2rem; font-weight: 500; color: #d8d4cc; }
+    .cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; padding: 1.8rem;
+      font-size: 0.74rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      border-top: var(--line) solid var(--ink);
+      background: var(--bg);
+    }
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+      border-bottom: 2px solid var(--blue);
+    }
+
+    code {
+      background: var(--yellow);
+      border: 2px solid var(--ink);
+      padding: 1px 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85em;
+      font-weight: 700;
+    }
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+      Back
+    </a>
+    <div class="nav-logo"><span class="dot"></span>HUI WANG</div>
+    <div class="nav-status"><div class="status-dot"></div>Live</div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <span class="geo geo-circle"></span>
+    <span class="geo geo-square"></span>
+    <span class="geo geo-triangle"></span>
+    <span class="geo-line-h"></span>
+    <span class="geo-dot"></span>
+
+    <div class="hero-inner">
+      <div>
+        <div class="hero-eyebrow">🧹 Case Study · Ops Tool</div>
+        <h1 class="hero-title">Cleaning<br>Tracker<span class="accent">.</span></h1>
+        <p class="hero-tagline">
+          The back-office tool I built for my own cleaning side business. OCR receipts in three languages, auto-categorize spend, and recommend the right cleaner for each job.
+        </p>
+        <div class="hero-cta">
+          <a href="#walkthrough" class="btn btn-primary">Watch Demo →</a>
+          <a href="#problem" class="btn btn-outline">Read Case</a>
+        </div>
+      </div>
+
+      <!-- Hero visual: real dashboard screenshot -->
+      <div class="hero-visual">
+        <div class="mockup-bar">
+          <div class="mockup-dot" style="background:var(--red)"></div>
+          <div class="mockup-dot" style="background:var(--yellow)"></div>
+          <div class="mockup-dot" style="background:var(--blue)"></div>
+          <span class="mockup-title">localhost:5000</span>
+        </div>
+        <img src="media/dashboard.png" alt="Cleaning Tracker dashboard — monthly spend chart, category breakdown" class="hero-shot">
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS STRIP -->
+  <div class="stats-strip">
+    <div class="stats-inner">
+      <div class="stat-item"><div class="stat-num">12</div><div class="stat-lbl">Categories</div></div>
+      <div class="stat-item"><div class="stat-num">3</div><div class="stat-lbl">OCR Languages</div></div>
+      <div class="stat-item"><div class="stat-num">5</div><div class="stat-lbl">Core Modules</div></div>
+      <div class="stat-item"><div class="stat-num">1</div><div class="stat-lbl">User (me)</div></div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- PROBLEM -->
+    <section id="problem">
+      <div class="two-col">
+        <div>
+          <div class="section-head reveal"><span class="section-marker red"></span><p class="section-label">01 · The Problem</p></div>
+          <h2 class="section-title reveal">Running a cleaning service from a notebook stops scaling fast</h2>
+          <p class="section-body reveal">
+            I shop in three languages, juggle receipts in a drawer, and answer "which product for this job?" from memory. The business runs, but the operations are invisible to me.
+          </p>
+        </div>
+        <div>
+          <ul class="pain-list">
+            <li class="pain-item reveal">
+              <span class="pain-icon">📥</span>
+              <div>
+                <strong>Receipt entry is the friction</strong>
+                <p>Typing every line of a German receipt by hand is the reason I stopped tracking expenses three times.</p>
+              </div>
+            </li>
+            <li class="pain-item reveal">
+              <span class="pain-icon">📊</span>
+              <div>
+                <strong>No visibility into spend</strong>
+                <p>Without categories, I can't tell if I'm overspending on tools vs. consumables, or which months drained the budget.</p>
+              </div>
+            </li>
+            <li class="pain-item reveal">
+              <span class="pain-icon">🧠</span>
+              <div>
+                <strong>Product knowledge stuck in my head</strong>
+                <p>"Mold in the bathroom, what do I bring?" I know the answer; nothing in my workflow captures it as a system.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="insight-box reveal">
+        <div class="insight-label">Core Job-to-be-Done</div>
+        <p>"Make the boring back-office work fast enough that I'll actually do it, and turn what's in my head into a tool I can query."</p>
+      </div>
+    </section>
+
+    <!-- WALKTHROUGH -->
+    <section id="walkthrough">
+      <div class="section-head reveal"><span class="section-marker"></span><p class="section-label">02 · Product in Action</p></div>
+      <h2 class="section-title reveal">See the two flows that matter</h2>
+      <p class="section-body reveal">Receipt → categorized rows in seconds. A free-form description → ranked products and instruments with matched terms.</p>
+      <div class="walkthrough-grid">
+        <div class="walk-card reveal">
+          <img src="media/upload-demo.gif" alt="Upload a German receipt and watch OCR extract and auto-categorize the items" class="walk-shot">
+          <div class="walk-meta">
+            <span class="walk-tag">Flow 01</span>
+            <div class="walk-title">Upload → OCR → Auto-categorize</div>
+            <p class="walk-desc">Drop a receipt photo. Items, prices, and date come back already mapped to one of 12 categories.</p>
+          </div>
+        </div>
+        <div class="walk-card reveal">
+          <img src="media/recommend-demo.gif" alt="Describe a customer's home and the recommender ranks products and instruments" class="walk-shot">
+          <div class="walk-meta">
+            <span class="walk-tag">Flow 02</span>
+            <div class="walk-title">Describe → Recommend</div>
+            <p class="walk-desc">Type the dirty situation in plain Chinese. The system ranks both products and electric instruments, with matched keywords shown.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section>
+      <div class="section-head reveal"><span class="section-marker"></span><p class="section-label">03 · Features</p></div>
+      <h2 class="section-title reveal">What was built, and why</h2>
+      <div class="features-list">
+        <div class="feature-block reveal">
+          <div class="feature-icon-wrap">📷</div>
+          <div>
+            <div class="feature-title">OCR Receipt Capture</div>
+            <p class="feature-desc">Upload a photo or PDF. Tesseract extracts items, prices, and dates from German, English, and Chinese receipts. Originals are auto-archived to <code>receipts/{year}/{month}</code>.</p>
+            <div class="feature-why"><div class="why-label">PM Rationale</div><p>The bottleneck wasn't analysis, it was data entry. Removing typing kills the resistance to actually tracking.</p></div>
+          </div>
+        </div>
+        <div class="feature-block reveal">
+          <div class="feature-icon-wrap">🏷️</div>
+          <div>
+            <div class="feature-title">Multilingual Auto-Categorization</div>
+            <p class="feature-desc">12 categories tuned to my real purchasing patterns, with keyword rules covering Chinese, English, and German product names plus brand variants and OCR fragments.</p>
+            <div class="feature-why"><div class="why-label">PM Rationale</div><p>Generic categories produce dead taxonomy. Categories built from my own receipt history match the questions I'd actually ask the data.</p></div>
+          </div>
+        </div>
+        <div class="feature-block reveal">
+          <div class="feature-icon-wrap">🧴</div>
+          <div>
+            <div class="feature-title">Conversational Recommender (Products + Instruments)</div>
+            <p class="feature-desc">Describe the dirty situation in your own words — "厨房瓷砖油渍重，卫生间水垢多". The system ranks both consumable products and electric instruments by keyword match (primary 2x, extended 1x), prioritizes instruments on ties, and shows every matched term so I can see why a result surfaced.</p>
+            <div class="feature-why"><div class="why-label">PM Rationale</div><p>My product knowledge becomes a queryable asset. Explicit weights beat vibes when I have to defend a recommendation to a client.</p></div>
+          </div>
+        </div>
+        <div class="feature-block reveal">
+          <div class="feature-icon-wrap">📅</div>
+          <div>
+            <div class="feature-title">Monthly Dashboard</div>
+            <p class="feature-desc">Items grouped by category, per-month totals, side-by-side comparison across months. Inline recategorize and delete.</p>
+            <div class="feature-why"><div class="why-label">PM Rationale</div><p>A side business doesn't need accounting software, it needs visibility. One screen answers "where did the money go this month?"</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DECISIONS -->
+    <section>
+      <div class="section-head reveal"><span class="section-marker yellow"></span><p class="section-label">04 · Key Decisions</p></div>
+      <h2 class="section-title reveal">Trade-offs I made on purpose</h2>
+      <div class="decisions-grid">
+        <div class="decision-card reveal">
+          <div class="decision-what">Decision 01</div>
+          <div class="decision-title">OCR: Local Tesseract vs. Cloud API</div>
+          <div class="decision-vs">
+            <span class="opt opt-chosen">Tesseract local</span>
+            <span class="vs-arrow">VS</span>
+            <span class="opt opt-reject">Cloud API</span>
+          </div>
+          <p class="decision-reason">Receipts hold financial and address data. Running locally avoids the privacy and cost surface of cloud OCR for a single-user tool. German accuracy is good enough with the right preprocessing.</p>
+        </div>
+        <div class="decision-card reveal">
+          <div class="decision-what">Decision 02</div>
+          <div class="decision-title">Recommender: Keyword scoring vs. Embeddings</div>
+          <div class="decision-vs">
+            <span class="opt opt-chosen">Keyword + weights</span>
+            <span class="vs-arrow">VS</span>
+            <span class="opt opt-reject">ML embeddings</span>
+          </div>
+          <p class="decision-reason">With under 50 products, ML overhead isn't justified. Keyword rules in one JSON file are debuggable, editable on the fly, and the scoring logic is something I can explain to a client.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- METRICS -->
+    <section>
+      <div class="section-head reveal"><span class="section-marker red"></span><p class="section-label">05 · If This Were a Real Product</p></div>
+      <h2 class="section-title reveal">What I'd measure</h2>
+      <p class="section-body reveal">The tool only matters if I keep using it and the business runs better because of it.</p>
+      <div class="metrics-grid">
+        <div class="metric-card reveal"><div class="metric-icon">⏱️</div><div class="metric-name">Time per Receipt</div><p class="metric-desc">Manual baseline vs. OCR-assisted. Target: 80% reduction.</p></div>
+        <div class="metric-card reveal"><div class="metric-icon">📥</div><div class="metric-name">Capture Rate</div><p class="metric-desc">% of real shopping trips that end up in the tracker. Below 90% means data is lying.</p></div>
+        <div class="metric-card reveal"><div class="metric-icon">🎯</div><div class="metric-name">Recommender Follow-through</div><p class="metric-desc">When the tool suggests a cleaner, do I bring it? Tracks whether the system reflects my real judgment.</p></div>
+        <div class="metric-card reveal"><div class="metric-icon">📈</div><div class="metric-name">Category Drift</div><p class="metric-desc">Month-over-month category share. Surfaces overspend before the bank statement does.</p></div>
+      </div>
+    </section>
+
+    <!-- TECH -->
+    <section>
+      <div class="section-head reveal"><span class="section-marker"></span><p class="section-label">06 · Tech Stack</p></div>
+      <h2 class="section-title reveal">Boring stack, fast iteration</h2>
+      <p class="section-body reveal">Picked tools I could ship in a weekend and maintain alone.</p>
+      <div class="tech-row">
+        <span class="tech-pill">Flask</span>
+        <span class="tech-pill">Python</span>
+        <span class="tech-pill">Tesseract OCR</span>
+        <span class="tech-pill">SQLite</span>
+        <span class="tech-pill">Jinja2</span>
+        <span class="tech-pill">Vanilla CSS</span>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <div class="cta-box">
+      <h2 class="reveal">Want to see it run?</h2>
+      <p class="reveal">The two demo clips above show the upload + OCR flow and the recommender end-to-end. Want to discuss how it was built?</p>
+      <div class="cta-buttons reveal">
+        <a href="#walkthrough" class="btn btn-primary">Watch Demo →</a>
+        <a href="index.html#contact" class="btn btn-blue">Get in Touch</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Hui Wang · Cleaning Tracker Case Study · <a href="index.html">Back to Portfolio</a></p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver(
+      entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') }),
+      { threshold: 0.08 }
+    )
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el))
+  </script>
+
+</body>
+</html>
