@@ -198,6 +198,51 @@
     .mockup-dot { width: 11px; height: 11px; border: 2px solid var(--ink); }
     .mockup-title { font-size: 0.72rem; font-weight: 600; color: var(--ink); margin-left: auto; letter-spacing: 0.05em; }
 
+    .hero-shot {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 2px solid var(--ink);
+    }
+
+    /* ── WALKTHROUGH (GIFs) ── */
+    .walkthrough-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      margin-top: 1.6rem;
+    }
+    .walk-card {
+      background: #fff;
+      border: var(--line) solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+      overflow: hidden;
+    }
+    .walk-shot {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-bottom: var(--line) solid var(--ink);
+      background: var(--bg);
+    }
+    .walk-meta { padding: 1rem 1.2rem; }
+    .walk-tag {
+      display: inline-block;
+      font-size: 0.66rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      background: var(--blue); color: #fff;
+      padding: 0.25rem 0.6rem;
+      border: 2px solid var(--ink);
+      margin-bottom: 0.5rem;
+    }
+    .walk-card:nth-child(2) .walk-tag { background: var(--red); }
+    .walk-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1rem; letter-spacing: -0.01em;
+      margin-bottom: 0.35rem;
+    }
+    .walk-desc { font-size: 0.86rem; font-weight: 500; }
+
     /* The actual app preview — Neumorphism */
     .mockup-screen {
       background: var(--neumo-bg);
@@ -655,12 +700,12 @@
           the friction of managing an ambitious life.
         </p>
         <div class="hero-cta">
-          <a href="#problem" class="btn btn-primary">Read Case →</a>
-          <a href="index.html#contact" class="btn btn-outline">Get in Touch</a>
+          <a href="#walkthrough" class="btn btn-primary">Watch Demo →</a>
+          <a href="#problem" class="btn btn-outline">Read Case</a>
         </div>
       </div>
 
-      <!-- App Mockup (Neumorphism preserved — represents the actual app) -->
+      <!-- Hero visual: real dashboard screenshot -->
       <div class="hero-visual">
         <div class="mockup-bar">
           <div class="mockup-dot" style="background:var(--red)"></div>
@@ -668,29 +713,7 @@
           <div class="mockup-dot" style="background:var(--blue)"></div>
           <span class="mockup-title">localhost:3000</span>
         </div>
-        <div class="mockup-screen">
-          <div class="mockup-sidebar">
-            <div class="mockup-nav">
-              <div class="mnav-item active">🏠</div>
-              <div class="mnav-item">📅</div>
-              <div class="mnav-item">🎯</div>
-              <div class="mnav-item">🗺️</div>
-              <div class="mnav-item">🌐</div>
-            </div>
-            <div class="mockup-content">
-              <div class="mday-header">Today — Apr 20</div>
-              <div class="mtask"><div class="mtask-dot" style="background:#10b981"></div><span class="mtask-label">Morning run</span><span class="mtask-time">07:00</span></div>
-              <div class="mtask"><div class="mtask-dot" style="background:#3b82f6"></div><span class="mtask-label">Review OKRs</span><span class="mtask-time">10:00</span></div>
-              <div class="mtask"><div class="mtask-dot" style="background:#8b5cf6"></div><span class="mtask-label">Read 30 pages</span><span class="mtask-time">13:00</span></div>
-              <div class="mtask"><div class="mtask-dot" style="background:#ec4899"></div><span class="mtask-label">Dinner w/ friends</span><span class="mtask-time">19:00</span></div>
-              <div class="mstat-row">
-                <div class="mstat"><div class="mstat-val">1/4</div><div class="mstat-lbl">Done</div></div>
-                <div class="mstat"><div class="mstat-val">3</div><div class="mstat-lbl">Goals</div></div>
-                <div class="mstat"><div class="mstat-val">2</div><div class="mstat-lbl">New</div></div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <img src="media/pulse-plan/dashboard.png" alt="Pulse Plan dashboard — today's tasks, year goals, and key stats at a glance" class="hero-shot">
       </div>
     </div>
   </section>
@@ -698,13 +721,12 @@
   <!-- STATS STRIP -->
   <div class="stats-strip">
     <div class="stats-inner">
-      <div class="stat-item"><div class="stat-num">8</div><div class="stat-lbl">Core Features</div></div>
-      <div class="stat-item"><div class="stat-num">2</div><div class="stat-lbl">Dev Phases</div></div>
+      <div class="stat-item"><div class="stat-num">7</div><div class="stat-lbl">Core Features</div></div>
       <!-- PP_STATS_START -->
       <div class="stat-item"><div class="stat-num">v1.2</div><div class="stat-lbl">Current Version</div></div>
       <!-- PP_STATS_END -->
-      <div class="stat-item"><div class="stat-num">1</div><div class="stat-lbl">User (me)</div></div>
       <div class="stat-item"><div class="stat-num">0</div><div class="stat-lbl">Graph Libraries</div></div>
+      <div class="stat-item"><div class="stat-num">1</div><div class="stat-lbl">User (me)</div></div>
     </div>
   </div>
 
@@ -756,113 +778,26 @@
       </div>
     </section>
 
-    <!-- USER STORIES -->
-    <section>
-      <div class="section-head reveal"><span class="section-marker"></span><p class="section-label">02 · Product Thinking</p></div>
-      <h2 class="section-title reveal">User stories that drove prioritization</h2>
-      <p class="section-body reveal">I wrote user stories from my own perspective first, then categorized them using MoSCoW to define the MVP scope.</p>
-      <div class="stories-grid">
-        <div class="story-card reveal">
-          <span class="story-num">US-01</span>
-          <span class="story-text"><strong>As a user</strong>, I want to see all my tasks for today in one view so I can start my day with clarity.</span>
-          <span class="story-priority p-must">Must</span>
-        </div>
-        <div class="story-card reveal">
-          <span class="story-num">US-02</span>
-          <span class="story-text"><strong>As a user</strong>, I want to paste an event URL and get a decision card (add/ignore) so I can process new activities without leaving the app.</span>
-          <span class="story-priority p-must">Must</span>
-        </div>
-        <div class="story-card reveal">
-          <span class="story-num">US-03</span>
-          <span class="story-text"><strong>As a user</strong>, I want the app to learn my preferences so it can recommend activities similar to ones I've accepted before.</span>
-          <span class="story-priority p-should">Should</span>
-        </div>
-        <div class="story-card reveal">
-          <span class="story-num">US-04</span>
-          <span class="story-text"><strong>As a user</strong>, I want to see my learning goals as a visual map so I can feel the structure and progress of what I'm studying.</span>
-          <span class="story-priority p-could">Could</span>
-        </div>
-        <div class="story-card reveal">
-          <span class="story-num">US-05</span>
-          <span class="story-text"><strong>As a user</strong>, I want to break yearly goals into milestones and see percentage completion so I don't lose sight of the big picture.</span>
-          <span class="story-priority p-should">Should</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- ROADMAP -->
-    <section>
-      <div class="section-head reveal"><span class="section-marker yellow"></span><p class="section-label">03 · Execution</p></div>
-      <h2 class="section-title reveal">Shipped in two phases</h2>
-      <p class="section-body reveal">I intentionally scoped Phase 1 to the two highest-friction problems — daily planning and event discovery — before building the more exploratory Phase 2 features.</p>
-      <div class="two-col" style="margin-top:2rem">
-        <div class="timeline">
-          <div class="tl-item">
-            <div class="tl-left"><div class="tl-dot done"></div><div class="tl-line"></div></div>
-            <div class="tl-content">
-              <div class="tl-phase reveal">Phase 1 · MVP</div>
-              <div class="tl-title reveal">Daily Calendar + Web Scraper</div>
-              <div class="tl-desc reveal">Built the month-view calendar, task CRUD, and the full scraper decision flow. Established localStorage persistence and Zustand state management.</div>
-            </div>
-          </div>
-          <div class="tl-item">
-            <div class="tl-left"><div class="tl-dot done"></div><div class="tl-line"></div></div>
-            <div class="tl-content">
-              <div class="tl-phase reveal">Phase 1 · Extension</div>
-              <div class="tl-title reveal">Smart Suggestion Engine</div>
-              <div class="tl-desc reveal">Added behavioral data tracking — accept/ignore actions are stored per category and used to surface recommendation reasons on future scrapes.</div>
-            </div>
-          </div>
-          <div class="tl-item">
-            <div class="tl-left"><div class="tl-dot done"></div><div class="tl-line"></div></div>
-            <div class="tl-content">
-              <div class="tl-phase reveal">Phase 2</div>
-              <div class="tl-title reveal">Yearly Goals + Visual Mind Map</div>
-              <div class="tl-desc reveal">Added the goal tracker with milestone checklists and built the interactive SVG mind map from scratch — no graph library used.</div>
-            </div>
-          </div>
-          <div class="tl-item">
-            <div class="tl-left"><div class="tl-dot"></div></div>
-            <div class="tl-content">
-              <div class="tl-phase reveal">Phase 3 · Planned</div>
-              <div class="tl-title reveal">Cloud Sync + AI Integration</div>
-              <div class="tl-desc reveal">Cross-device sync via Supabase, AI-powered daily plan generation, and real web scraping replacing the current mock.</div>
-            </div>
+    <!-- WALKTHROUGH -->
+    <section id="walkthrough">
+      <div class="section-head reveal"><span class="section-marker"></span><p class="section-label">02 · Product in Action</p></div>
+      <h2 class="section-title reveal">The two flows that demo the core idea</h2>
+      <p class="section-body reveal">Adding a task lands it on both the calendar and the day timeline. The mind map turns linear goals into a spatial structure with progress rings.</p>
+      <div class="walkthrough-grid">
+        <div class="walk-card reveal">
+          <img src="media/pulse-plan/add-task.gif" alt="Add a task to the daily calendar with one inline form" class="walk-shot">
+          <div class="walk-meta">
+            <span class="walk-tag">Flow 01</span>
+            <div class="walk-title">Add Task → Calendar + Timeline</div>
+            <p class="walk-desc">One inline form, the task lands on the day list and the hour-by-hour timeline at the same time.</p>
           </div>
         </div>
-        <div>
-          <div class="section-head reveal" style="margin-top:0"><span class="section-marker"></span><p class="section-label">Key Decisions</p></div>
-          <div class="decisions-grid" style="grid-template-columns:1fr; margin-top:1rem">
-            <div class="decision-card reveal">
-              <div class="decision-what">Decision 01</div>
-              <div class="decision-title">Database: Local vs. Cloud</div>
-              <div class="decision-vs">
-                <span class="opt opt-chosen">localStorage</span>
-                <span class="vs-arrow">VS</span>
-                <span class="opt opt-reject">Supabase</span>
-              </div>
-              <p class="decision-reason">Chose localStorage to ship faster with zero auth complexity. The real product need (persistence) is met; cloud sync is a Phase 3 enhancement.</p>
-            </div>
-            <div class="decision-card reveal">
-              <div class="decision-what">Decision 02</div>
-              <div class="decision-title">Mind Map: Library vs. Custom SVG</div>
-              <div class="decision-vs">
-                <span class="opt opt-chosen">Custom SVG</span>
-                <span class="vs-arrow">VS</span>
-                <span class="opt opt-reject">D3 / Cytoscape</span>
-              </div>
-              <p class="decision-reason">Custom SVG gave full control over the progress ring animation and interaction model. The constraint forced a deeper understanding of what the feature actually needs.</p>
-            </div>
-            <div class="decision-card reveal">
-              <div class="decision-what">Decision 03</div>
-              <div class="decision-title">Scraper: Mock vs. Real</div>
-              <div class="decision-vs">
-                <span class="opt opt-chosen">Mock scraper</span>
-                <span class="vs-arrow">VS</span>
-                <span class="opt opt-reject">Real HTTP fetch</span>
-              </div>
-              <p class="decision-reason">A real scraper requires a backend proxy to bypass CORS. The mock validates the entire UX flow and decision logic — the right thing to prove in a prototype.</p>
-            </div>
+        <div class="walk-card reveal">
+          <img src="media/pulse-plan/mindmap.gif" alt="Pan, zoom, and click into the visual mind map of learning goals" class="walk-shot">
+          <div class="walk-meta">
+            <span class="walk-tag">Flow 02</span>
+            <div class="walk-title">Mind Map · Pan, Zoom, Drill in</div>
+            <p class="walk-desc">Pan, zoom, and click any node to see subtasks. Progress rings turn percentage into a visual signal you feel.</p>
           </div>
         </div>
       </div>
@@ -870,7 +805,7 @@
 
     <!-- FEATURES -->
     <section>
-      <div class="section-head reveal"><span class="section-marker red"></span><p class="section-label">04 · Features</p></div>
+      <div class="section-head reveal"><span class="section-marker red"></span><p class="section-label">03 · Features</p></div>
       <h2 class="section-title reveal">What was built, and why</h2>
       <!-- PP_FEATURES_START -->
       <div class="features-list">
@@ -891,14 +826,6 @@
           </div>
         </div>
         <div class="feature-block reveal">
-          <div class="feature-icon-wrap">✨</div>
-          <div>
-            <div class="feature-title">Smart Suggestion Engine</div>
-            <p class="feature-desc">Behavioral learning loop — every accept/ignore action is stored per category. On future scrapes, the system surfaces a "recommendation reason" if the activity matches a user's historical preferences.</p>
-            <div class="feature-why"><div class="why-label">PM Rationale</div><p>This is the data flywheel: more usage → better signals → better recommendations → more value → more usage. Even with simple logic, it demonstrates the personalization principle central to modern productivity products.</p></div>
-          </div>
-        </div>
-        <div class="feature-block reveal">
           <div class="feature-icon-wrap">🗺️</div>
           <div>
             <div class="feature-title">Visual Mind Map</div>
@@ -914,24 +841,36 @@
             <div class="feature-why"><div class="why-label">PM Rationale</div><p>Most goal apps fail because goals aren't connected to daily behavior. This tracker sits in the same app as the daily calendar — creating a natural loop between "what do I do today" and "why am I doing it."</p></div>
           </div>
         </div>
-        <div class="feature-block reveal">
-          <div class="feature-icon-wrap">🔒</div>
-          <div>
-            <div class="feature-title">Privacy-First Share View</div>
-            <p class="feature-desc">A dedicated <code>/share</code> route renders the same calendar data with all task details stripped — every block appears as "Booked" with only the time slot visible. Designed for sharing availability without exposing personal details.</p>
-            <div class="feature-why"><div class="why-label">PM Rationale</div><p>Sharing a calendar is a social act; sharing what's inside is a privacy risk. Separating the two mirrors how enterprise calendar tools handle free/busy access control, and sets up a clean boundary for Phase 3 multi-user sync.</p></div>
-          </div>
-        </div>
-        <div class="feature-block reveal">
-          <div class="feature-icon-wrap">🗑️</div>
-          <div>
-            <div class="feature-title">Trash &amp; Restore</div>
-            <p class="feature-desc">Deleting a task or goal moves it to a dedicated Trash page instead of permanent removal. Items can be restored to their original state or permanently deleted. Sidebar badge shows the current trash count.</p>
-            <div class="feature-why"><div class="why-label">PM Rationale</div><p>Destructive actions without undo are a trust liability — one accidental delete erodes confidence in the whole system. The two-step trash pattern (soft delete → explicit purge) is the industry standard for a reason: it makes users feel safe to act quickly.</p></div>
-          </div>
-        </div>
       </div>
       <!-- PP_FEATURES_END -->
+    </section>
+
+    <!-- DECISIONS -->
+    <section>
+      <div class="section-head reveal"><span class="section-marker yellow"></span><p class="section-label">04 · Key Decisions</p></div>
+      <h2 class="section-title reveal">Trade-offs I made on purpose</h2>
+      <div class="decisions-grid" style="grid-template-columns:1fr 1fr">
+        <div class="decision-card reveal">
+          <div class="decision-what">Decision 01</div>
+          <div class="decision-title">Database: Local vs. Cloud</div>
+          <div class="decision-vs">
+            <span class="opt opt-chosen">localStorage</span>
+            <span class="vs-arrow">VS</span>
+            <span class="opt opt-reject">Supabase</span>
+          </div>
+          <p class="decision-reason">Chose localStorage to ship faster with zero auth complexity. The real product need (persistence) is met; cloud sync is a Phase 3 enhancement.</p>
+        </div>
+        <div class="decision-card reveal">
+          <div class="decision-what">Decision 02</div>
+          <div class="decision-title">Mind Map: Library vs. Custom SVG</div>
+          <div class="decision-vs">
+            <span class="opt opt-chosen">Custom SVG</span>
+            <span class="vs-arrow">VS</span>
+            <span class="opt opt-reject">D3 / Cytoscape</span>
+          </div>
+          <p class="decision-reason">Custom SVG gave full control over the progress ring animation and interaction model. The constraint forced a deeper understanding of what the feature actually needs.</p>
+        </div>
+      </div>
     </section>
 
     <!-- METRICS -->
@@ -942,9 +881,7 @@
       <div class="metrics-grid">
         <div class="metric-card reveal"><div class="metric-icon">📊</div><div class="metric-name">Daily Active Rate</div><p class="metric-desc">Are users returning every day? Planning tools only have value if they're habitual. Target: 60% D7 retention.</p></div>
         <div class="metric-card reveal"><div class="metric-icon">✅</div><div class="metric-name">Task Completion Rate</div><p class="metric-desc">Percentage of daily tasks marked done. The core proxy for whether the app is helping users follow through.</p></div>
-        <div class="metric-card reveal"><div class="metric-icon">⚡</div><div class="metric-name">Scraper Accept Rate</div><p class="metric-desc">What % of scraped activities get added to the plan? Rising rate over time validates the suggestion engine is learning.</p></div>
-        <div class="metric-card reveal"><div class="metric-icon">🗺️</div><div class="metric-name">Mind Map Node Depth</div><p class="metric-desc">Average subtasks per node. Depth signals that users are investing in the tool for real learning goals, not just exploration.</p></div>
-        <div class="metric-card reveal"><div class="metric-icon">🎯</div><div class="metric-name">Milestone Velocity</div><p class="metric-desc">Rate at which users complete milestones over time. A flattening curve would signal that goal-setting is too ambitious or unclear.</p></div>
+        <div class="metric-card reveal"><div class="metric-icon">🗺️</div><div class="metric-name">Mind Map Node Depth</div><p class="metric-desc">Average subtasks per node. Depth signals users are investing in the tool for real learning goals, not just exploration.</p></div>
         <div class="metric-card reveal"><div class="metric-icon">🔗</div><div class="metric-name">Cross-feature Usage</div><p class="metric-desc">% of users who use 3+ features. The app's value compounds when features interact — this measures whether the "unified" premise actually holds.</p></div>
       </div>
     </section>
@@ -967,48 +904,15 @@
       <!-- PP_TECH_END -->
     </section>
 
-    <!-- REFLECTION -->
-    <section>
-      <div class="section-head reveal"><span class="section-marker red"></span><p class="section-label">07 · Reflection</p></div>
-      <h2 class="section-title reveal">What I learned, and what comes next</h2>
-      <!-- PP_REFLECTION_START -->
-      <div class="reflection-grid">
-        <div class="reflection-card learned reveal">
-          <div class="reflection-label" style="color:var(--blue)">✓ What I Learned</div>
-          <ul>
-            <li>Scoping the MVP strictly to must-haves made Phase 1 shippable in days instead of weeks.</li>
-            <li>Writing user stories first — even for a solo project — forced clarity on what "done" looks like.</li>
-            <li>A behavioral data loop doesn't need ML to be valuable; even simple counters create meaningful personalization signals.</li>
-            <li>Building the mind map from scratch was harder but taught me that constraints drive creative solutions.</li>
-            <li>HCI background made me obsess over interaction feedback — every button needed a state transition, every action needed a visual response.</li>
-            <li>A timeline view and a list view serve different mental modes — giving users both costs one toggle and removes a whole category of friction.</li>
-            <li>Soft-delete (trash) is a trust feature, not just a safety net. Users act more confidently when they know actions are reversible.</li>
-            <li>Designing a privacy boundary early (share view showing only "Booked") made the architecture cleaner for future multi-user sync.</li>
-          </ul>
-        </div>
-        <div class="reflection-card next reveal">
-          <div class="reflection-label" style="color:var(--red)">→ What I'd Do Next</div>
-          <ul>
-            <li>Interview 5 other students about their planning pain points before building Phase 3 — I may be solving for myself, not a broader segment.</li>
-            <li>Replace the mock scraper with a real backend proxy and test against actual event sites (Eventbrite, Meetup, lu.ma).</li>
-            <li>Add Supabase for cloud sync — the #1 blocker for real daily use is being tied to one device. The share view is already architected for this.</li>
-            <li>A/B test the scraper decision card layout — does showing the recommendation reason before or after the title affect accept rate?</li>
-            <li>Build a weekly review flow: what did you plan vs. what did you do? Closing the feedback loop is where planning tools earn long-term trust.</li>
-            <li>Auto-expire trash after 30 days — mirrors the behavior users expect from tools like Notion and Gmail, reducing mental overhead.</li>
-          </ul>
-        </div>
-      </div>
-      <!-- PP_REFLECTION_END -->
-    </section>
-
   </div>
 
   <!-- CTA -->
   <div class="cta-section">
     <div class="cta-box">
-      <h2 class="reveal">Want to talk about it?</h2>
-      <p class="reveal">Happy to walk through the product thinking, the trade-offs, or anything from the case above.</p>
+      <h2 class="reveal">Want to see it run?</h2>
+      <p class="reveal">The two demo clips above show task creation and the mind map end-to-end. Want to discuss the product thinking behind it?</p>
       <div class="cta-buttons reveal">
+        <a href="#walkthrough" class="btn btn-primary">Watch Demo →</a>
         <a href="index.html#contact" class="btn btn-blue">Get in Touch</a>
       </div>
     </div>
