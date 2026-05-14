@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Akaflieg — Case Study · Hui Wang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Archivo+Black&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #F5F0E8;
+      --ink: #1A1A1A;
+      --red: #E63946;
+      --blue: #2D5FD8;
+      --yellow: #FFD43B;
+      --line: 2.5px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+    a { color: inherit; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 6%;
+      background: var(--bg);
+      border-bottom: var(--line) solid var(--ink);
+    }
+    .nav-back {
+      display: flex; align-items: center; gap: 0.4rem;
+      text-decoration: none;
+      font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding-bottom: 4px; position: relative;
+    }
+    .nav-back::after {
+      content: ''; position: absolute; left: 0; bottom: 0;
+      width: 0; height: 3px; background: var(--blue);
+      transition: width 0.2s;
+    }
+    .nav-back:hover::after { width: 100%; }
+    .nav-back svg { width: 14px; height: 14px; }
+    .nav-logo {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1rem; letter-spacing: 0.06em;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .nav-logo .dot { width: 12px; height: 12px; background: var(--red); }
+    .nav-status {
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--ink);
+      background: var(--yellow);
+      border: var(--line) solid var(--ink);
+      padding: 0.3rem 0.7rem;
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .status-dot { width: 8px; height: 8px; background: var(--red); animation: blink 1.4s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 8rem 6% 5rem;
+      position: relative; overflow: hidden;
+    }
+    .geo { position: absolute; pointer-events: none; z-index: 0; }
+    .geo-circle {
+      width: 220px; height: 220px;
+      background: var(--red);
+      border: var(--line) solid var(--ink);
+      border-radius: 50%;
+      top: 10%; right: -60px;
+    }
+    .geo-square {
+      width: 100px; height: 100px;
+      background: var(--blue);
+      border: var(--line) solid var(--ink);
+      bottom: 12%; left: 4%;
+      transform: rotate(-12deg);
+    }
+    .geo-triangle {
+      width: 0; height: 0;
+      border-left: 50px solid transparent;
+      border-right: 50px solid transparent;
+      border-bottom: 86px solid var(--yellow);
+      filter: drop-shadow(2.5px 2.5px 0 var(--ink));
+      bottom: 30%; right: 8%;
+    }
+    .geo-line-h {
+      position: absolute;
+      height: 4px; width: 90px;
+      background: var(--ink);
+      top: 22%; left: 4%;
+    }
+    .geo-dot {
+      position: absolute;
+      width: 14px; height: 14px;
+      background: var(--blue);
+      border-radius: 50%;
+      top: 30%; left: 12%;
+    }
+
+    .hero-inner {
+      position: relative; z-index: 1;
+      max-width: 1100px; width: 100%; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    }
+    @media(max-width:768px){.hero-inner{grid-template-columns:1fr;gap:2.5rem}}
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--ink);
+      background: var(--yellow);
+      border: var(--line) solid var(--ink);
+      padding: 0.4rem 0.9rem;
+      margin-bottom: 1.6rem;
+    }
+    .hero-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(2.6rem, 6vw, 4.8rem);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.2rem;
+      text-transform: uppercase;
+    }
+    .hero-title .accent { color: var(--red); }
+    .hero-tagline {
+      font-size: 1.05rem;
+      margin-bottom: 2rem;
+      max-width: 460px;
+      font-weight: 500;
+    }
+    .hero-meta-row {
+      display: flex; flex-wrap: wrap; gap: 1.6rem;
+      margin-bottom: 2rem;
+      font-size: 0.82rem; font-weight: 500;
+    }
+    .hero-meta-row span strong {
+      display: block;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 0.1rem;
+    }
+    .hero-cta { display: flex; gap: 0.9rem; flex-wrap: wrap; }
+    .btn {
+      padding: 0.85rem 1.7rem;
+      font-size: 0.85rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      text-decoration: none;
+      border: var(--line) solid var(--ink);
+      transition: transform 0.15s, box-shadow 0.15s;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      cursor: pointer;
+      background: var(--bg); color: var(--ink);
+    }
+    .btn-primary { background: var(--yellow); }
+    .btn-primary:hover { transform: translate(-3px,-3px); box-shadow: 6px 6px 0 var(--ink); }
+    .btn-outline { background: var(--bg); }
+    .btn-outline:hover { transform: translate(-3px,-3px); box-shadow: 6px 6px 0 var(--blue); }
+    .btn-blue { background: var(--blue); color: #fff; }
+    .btn-blue:hover { transform: translate(-3px,-3px); box-shadow: 6px 6px 0 var(--ink); }
+
+    .hero-visual {
+      background: var(--bg);
+      border: var(--line) solid var(--ink);
+      padding: 1rem;
+      box-shadow: 8px 8px 0 var(--ink);
+    }
+    .mockup-bar {
+      display: flex; align-items: center; gap: 0.4rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 2px solid var(--ink);
+      margin-bottom: 1rem;
+    }
+    .mockup-dot { width: 11px; height: 11px; border: 2px solid var(--ink); }
+    .mockup-title { font-size: 0.72rem; font-weight: 600; color: var(--ink); margin-left: auto; letter-spacing: 0.05em; }
+
+    .video-wrap {
+      position: relative;
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 2px solid var(--ink);
+      background: #000;
+      overflow: hidden;
+      text-decoration: none;
+    }
+    .video-wrap img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.2s;
+    }
+    .video-wrap .play-btn {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 68px; height: 68px;
+      background: var(--red);
+      border: var(--line) solid var(--ink);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+      font-size: 1.6rem;
+      box-shadow: 4px 4px 0 var(--ink);
+      transition: transform 0.15s, box-shadow 0.15s;
+      padding-left: 4px;
+    }
+    .video-wrap:hover img { transform: scale(1.03); }
+    .video-wrap:hover .play-btn { transform: translate(calc(-50% - 3px), calc(-50% - 3px)); box-shadow: 7px 7px 0 var(--ink); }
+
+    .stats-strip {
+      background: var(--ink);
+      color: #fff;
+      border-top: var(--line) solid var(--ink);
+      border-bottom: var(--line) solid var(--ink);
+      padding: 2.5rem 6%;
+    }
+    .stats-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; gap: 2rem; flex-wrap: wrap; justify-content: space-around;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 2.4rem;
+      letter-spacing: -0.02em;
+      color: var(--yellow);
+    }
+    .stat-item:nth-child(2) .stat-num { color: var(--red); }
+    .stat-item:nth-child(3) .stat-num { color: #fff; }
+    .stat-item:nth-child(4) .stat-num { color: var(--blue); }
+    .stat-lbl {
+      font-size: 0.7rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      margin-top: 0.4rem;
+    }
+
+    .content { max-width: 1100px; margin: 0 auto; padding: 0 6%; }
+    section { padding: 5rem 0; }
+    section + section { border-top: var(--line) solid var(--ink); }
+
+    .section-head {
+      display: flex; align-items: center; gap: 0.8rem;
+      margin-bottom: 0.7rem;
+    }
+    .section-marker {
+      width: 22px; height: 22px;
+      background: var(--blue);
+      border: var(--line) solid var(--ink);
+      flex-shrink: 0;
+    }
+    .section-marker.red { background: var(--red); border-radius: 50%; }
+    .section-marker.yellow {
+      background: transparent; border: none;
+      width: 0; height: 0;
+      border-left: 11px solid transparent;
+      border-right: 11px solid transparent;
+      border-bottom: 19px solid var(--yellow);
+      filter: drop-shadow(2px 2px 0 var(--ink));
+    }
+    .section-label {
+      font-size: 0.74rem; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+    }
+    .section-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+      line-height: 1; letter-spacing: -0.01em;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    .section-body {
+      font-size: 1rem;
+      max-width: 640px;
+      font-weight: 500;
+    }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+    @media(max-width:768px){.two-col{grid-template-columns:1fr}}
+
+    .pain-list { list-style: none; margin-top: 1.2rem; display: flex; flex-direction: column; gap: 1rem; }
+    .pain-item {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 1.1rem 1.3rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+      border-left: 8px solid var(--red);
+    }
+    .pain-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      width: 38px; height: 38px;
+      background: var(--bg);
+      border: var(--line) solid var(--ink);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pain-item p { font-size: 0.9rem; font-weight: 500; }
+    .pain-item strong {
+      display: block; margin-bottom: 0.2rem;
+      font-size: 0.95rem;
+      font-family: 'Archivo Black', sans-serif;
+      letter-spacing: -0.01em;
+    }
+
+    .insight-box {
+      margin-top: 2.5rem;
+      padding: 1.5rem 1.8rem;
+      background: var(--blue);
+      color: #fff;
+      border: var(--line) solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+    }
+    .insight-label {
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 0.6rem;
+    }
+    .insight-box p { font-size: 0.98rem; font-weight: 500; line-height: 1.55; }
+
+    .method-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem; margin-top: 1.5rem;
+    }
+    .method-card {
+      padding: 1.3rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+    }
+    .method-card:nth-child(4n+1) { border-top: 10px solid var(--blue); }
+    .method-card:nth-child(4n+2) { border-top: 10px solid var(--red); }
+    .method-card:nth-child(4n+3) { border-top: 10px solid var(--yellow); }
+    .method-card:nth-child(4n)   { border-top: 10px solid var(--ink); }
+    .method-num {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 0.72rem; letter-spacing: 0.1em;
+      color: var(--red);
+      margin-bottom: 0.4rem;
+    }
+    .method-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1rem; letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+    .method-desc { font-size: 0.85rem; font-weight: 500; }
+
+    .persona-card {
+      margin-top: 1.5rem;
+      display: grid; grid-template-columns: 1.1fr 1fr; gap: 1.6rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+      padding: 1.6rem;
+      align-items: center;
+    }
+    @media(max-width:600px){.persona-card{grid-template-columns:1fr}}
+    .persona-avatar {
+      width: 100%;
+      background: var(--bg);
+      border: var(--line) solid var(--ink);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .persona-avatar img { display: block; width: 100%; height: auto; }
+    .persona-tag {
+      display: inline-block;
+      font-size: 0.66rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      background: var(--yellow);
+      border: 2px solid var(--ink);
+      padding: 0.2rem 0.6rem;
+      margin-bottom: 0.5rem;
+    }
+    .persona-name {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1.3rem; letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+    .persona-quote {
+      font-size: 0.92rem; font-weight: 500;
+      font-style: italic;
+      padding-left: 0.9rem;
+      border-left: 4px solid var(--red);
+      margin-top: 0.7rem;
+    }
+
+    .figure {
+      margin-top: 1.6rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+      overflow: hidden;
+    }
+    .figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-bottom: var(--line) solid var(--ink);
+      background: var(--bg);
+    }
+    .figure-cap {
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.06em;
+      padding: 0.7rem 1rem;
+      background: var(--bg);
+      color: var(--ink);
+    }
+    .figure-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+      margin-top: 1.6rem;
+    }
+    @media(max-width:600px){.figure-row{grid-template-columns:1fr}}
+    .figure-row .figure { margin-top: 0; }
+
+    .quote-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1.6rem;
+    }
+    .quote-card {
+      padding: 1.4rem 1.5rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+      border-left: 8px solid var(--blue);
+      font-size: 0.95rem;
+      font-style: italic;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+    .quote-card:nth-child(2) { border-left-color: var(--red); }
+    .quote-card:nth-child(3) { border-left-color: var(--yellow); }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1.6rem;
+    }
+    .gallery-item {
+      background: #fff;
+      border: var(--line) solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .gallery-item:hover { transform: translate(-3px,-3px); box-shadow: 9px 9px 0 var(--blue); }
+    .gallery-item:nth-child(2n):hover { box-shadow: 9px 9px 0 var(--red); }
+    .gallery-item:nth-child(3n):hover { box-shadow: 9px 9px 0 var(--yellow); }
+    .gallery-item img {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: var(--bg);
+      border-bottom: var(--line) solid var(--ink);
+    }
+    .gallery-cap {
+      padding: 0.7rem 0.9rem;
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .reflection-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 1.5rem; }
+    @media(max-width:600px){.reflection-grid{grid-template-columns:1fr}}
+    .reflection-card {
+      padding: 1.6rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+    }
+    .reflection-card.learned { border-top: 12px solid var(--blue); }
+    .reflection-card.next { border-top: 12px solid var(--red); }
+    .reflection-label {
+      font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      margin-bottom: 0.9rem;
+    }
+    .reflection-card ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .reflection-card li {
+      font-size: 0.9rem; font-weight: 500;
+      display: flex; gap: 0.6rem; align-items: flex-start;
+    }
+    .reflection-card li::before {
+      flex-shrink: 0;
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1rem; line-height: 1;
+      margin-top: 0.15rem;
+    }
+    .learned li::before { content: "✓"; color: var(--blue); }
+    .next li::before { content: "→"; color: var(--red); }
+
+    .client-feedback {
+      margin-top: 2rem;
+      padding: 1.5rem 1.8rem;
+      background: var(--yellow);
+      border: var(--line) solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+      font-size: 0.95rem;
+      font-weight: 500;
+      font-style: italic;
+    }
+    .client-feedback strong { font-style: normal; font-family: 'Archivo Black', sans-serif; letter-spacing: -0.01em; }
+
+    .cta-section {
+      background: var(--ink);
+      border-top: var(--line) solid var(--ink);
+    }
+    .cta-box {
+      max-width: 700px; margin: 0 auto;
+      text-align: center;
+      padding: 5rem 6%;
+      color: #fff;
+    }
+    .cta-box h2 {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 2rem;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+      color: #fff;
+    }
+    .cta-box p { margin-bottom: 2rem; font-weight: 500; color: #d8d4cc; }
+    .cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    footer {
+      text-align: center; padding: 1.8rem;
+      font-size: 0.74rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      border-top: var(--line) solid var(--ink);
+      background: var(--bg);
+    }
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+      border-bottom: 2px solid var(--blue);
+    }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+      Back
+    </a>
+    <div class="nav-logo"><span class="dot"></span>HUI WANG</div>
+    <div class="nav-status"><div class="status-dot"></div>UX Case</div>
+  </nav>
+
+  <section class="hero">
+    <span class="geo geo-circle"></span>
+    <span class="geo geo-square"></span>
+    <span class="geo geo-triangle"></span>
+    <span class="geo-line-h"></span>
+    <span class="geo-dot"></span>
+
+    <div class="hero-inner">
+      <div>
+        <div class="hero-eyebrow">✈️ Case Study · UX Research</div>
+        <h1 class="hero-title">Aka<br>flieg<span class="accent">.</span></h1>
+        <p class="hero-tagline">
+          A web redesign for TUM's oldest aviation student club. Joining requirements became a boarding-pass card, the email-only application was replaced with a direct CTA, and a flight-path narrative tells the club's story to sponsors.
+        </p>
+        <div class="hero-meta-row">
+          <span><strong>Role</strong>UX Research &amp; Design</span>
+          <span><strong>Client</strong>Akaflieg · TUM</span>
+          <span><strong>Year</strong>2024</span>
+        </div>
+        <div class="hero-cta">
+          <a href="#demo" class="btn btn-primary">Watch Demo →</a>
+          <a href="#problem" class="btn btn-outline">Read Case</a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="mockup-bar">
+          <div class="mockup-dot" style="background:var(--red)"></div>
+          <div class="mockup-dot" style="background:var(--yellow)"></div>
+          <div class="mockup-dot" style="background:var(--blue)"></div>
+          <span class="mockup-title">Akaflieg · Demo</span>
+        </div>
+        <a href="https://youtu.be/Y2bOxQu-zkk" target="_blank" rel="noopener" class="video-wrap" aria-label="Watch Akaflieg demo on YouTube">
+          <img src="https://img.youtube.com/vi/Y2bOxQu-zkk/hqdefault.jpg" alt="Akaflieg demo thumbnail">
+          <span class="play-btn">▶</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="stats-strip">
+    <div class="stats-inner">
+      <div class="stat-item"><div class="stat-num">2</div><div class="stat-lbl">Pages Redesigned</div></div>
+      <div class="stat-item"><div class="stat-num">2</div><div class="stat-lbl">User Groups</div></div>
+      <div class="stat-item"><div class="stat-num">8</div><div class="stat-lbl">Crazy 8 Sketches</div></div>
+      <div class="stat-item"><div class="stat-num">2</div><div class="stat-lbl">Demo Videos</div></div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <section id="problem">
+      <div class="two-col">
+        <div>
+          <div class="section-head reveal"><span class="section-marker red"></span><p class="section-label">01 · The Problem</p></div>
+          <h2 class="section-title reveal">The site doesn't help new members or sponsors</h2>
+          <p class="section-body reveal">
+            Akaflieg is one of TUM's oldest student clubs. They build aircraft, work on aviation tech, and train future pilots. But their website was costing them on two fronts: new members couldn't figure out how to join, and sponsors couldn't quickly see what the club actually did.
+          </p>
+          <p class="section-body reveal" style="margin-top:1rem">
+            The Join Us page was a wall of paragraphs with a hidden email link. The Sponsors page listed projects without any visual hierarchy, so the most impressive work blended into the rest.
+          </p>
+        </div>
+        <div>
+          <ul class="pain-list">
+            <li class="pain-item reveal">
+              <span class="pain-icon">📄</span>
+              <div>
+                <strong>Information overload</strong>
+                <p>Joining requirements were buried in long paragraphs. New visitors didn't know what was actually required.</p>
+              </div>
+            </li>
+            <li class="pain-item reveal">
+              <span class="pain-icon">🔗</span>
+              <div>
+                <strong>Hidden hyperlinks</strong>
+                <p>The application action was a plain mailto link inside body text. Easy to miss, friction-heavy to act on.</p>
+              </div>
+            </li>
+            <li class="pain-item reveal">
+              <span class="pain-icon">📦</span>
+              <div>
+                <strong>Projects shown flat</strong>
+                <p>The Sponsors page listed projects without hierarchy or visual cues. Nothing stood out to a quick scanner.</p>
+              </div>
+            </li>
+            <li class="pain-item reveal">
+              <span class="pain-icon">❓</span>
+              <div>
+                <strong>No clear "what we do"</strong>
+                <p>The club's history and identity were scattered. Sponsors had to assemble the story themselves.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="insight-box reveal">
+        <div class="insight-label">Goal</div>
+        <p>Reduce cognitive load on two pages — Join Us and Sponsors — so prospective members can act and sponsors can engage. Visibility and hierarchy first, decoration last.</p>
+      </div>
+    </section>
+
+    <section id="research">
+      <div class="section-head reveal"><span class="section-marker"></span><p class="section-label">02 · Desk Research</p></div>
+      <h2 class="section-title reveal">Understanding Akaflieg before redesigning it</h2>
+      <p class="section-body reveal">
+        Before touching the design, we mapped what the club actually is and what the client urgently needed. The initial survey from Akaflieg gave us a prioritized list of issues, which kept the scope honest.
+      </p>
+
+      <div class="method-grid">
+        <div class="method-card reveal">
+          <div class="method-num">R1</div>
+          <div class="method-title">Club Background</div>
+          <p class="method-desc">Akaflieg is one of TUM's oldest student clubs. Members build aircraft, work with cutting-edge aviation tech, and train future pilots.</p>
+        </div>
+        <div class="method-card reveal">
+          <div class="method-num">R2</div>
+          <div class="method-title">Existing Site Audit</div>
+          <p class="method-desc">Walked through the live site as a first-time visitor, logged every dead-end, redundant block, and buried CTA.</p>
+        </div>
+        <div class="method-card reveal">
+          <div class="method-num">R3</div>
+          <div class="method-title">Client Survey</div>
+          <p class="method-desc">Used Akaflieg's own survey to rank user-reported issues by urgency. Cut anything outside the Join Us and Sponsors flows.</p>
+        </div>
+        <div class="method-card reveal">
+          <div class="method-num">R4</div>
+          <div class="method-title">Scope Lock</div>
+          <p class="method-desc">Two pages, two user groups. Anything else was parked for a future round.</p>
+        </div>
+      </div>
+
+      <div class="figure-row">
+        <div class="figure reveal">
+          <img src="media/akaflieg/mainpage-original.png" alt="Original Akaflieg homepage">
+          <div class="figure-cap">The existing Akaflieg site before redesign.</div>
+        </div>
+        <div class="figure reveal">
+          <img src="media/akaflieg/client-needs.png" alt="Prioritized client needs">
+          <div class="figure-cap">Survey-driven priority list from the client.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="define">
+      <div class="section-head reveal"><span class="section-marker yellow"></span><p class="section-label">03 · Define</p></div>
+      <h2 class="section-title reveal">Two user groups, one journey each</h2>
+      <p class="section-body reveal">
+        Timeline didn't allow recruiting real interviewees, so we role-played as prospective members and sponsors and simulated the visit end-to-end. The result: two personas and one user journey for each.
+      </p>
+
+      <div class="persona-card reveal">
+        <div class="persona-avatar"><img src="media/akaflieg/persona-member.png" alt="Persona of a prospective new member"></div>
+        <div>
+          <span class="persona-tag">Persona 1</span>
+          <div class="persona-name">The Prospective New Member</div>
+          <p style="font-size:0.92rem;font-weight:500">
+            TUM student, curious about aviation, lands on the site after hearing about Akaflieg from a friend or a club fair. Wants to know: am I eligible, what does joining commit me to, and how do I actually apply.
+          </p>
+          <p class="persona-quote">
+            "I'd join if I could tell in 30 seconds what the requirements are and where to click."
+          </p>
+        </div>
+      </div>
+
+      <div class="persona-card reveal">
+        <div class="persona-avatar"><img src="media/akaflieg/persona-sponsor.png" alt="Persona of a prospective sponsor"></div>
+        <div>
+          <span class="persona-tag">Persona 2</span>
+          <div class="persona-name">The Prospective Sponsor</div>
+          <p style="font-size:0.92rem;font-weight:500">
+            Industry contact or alum, evaluating whether to fund a student project. Has limited time. Wants the club's track record and current projects on one page, in scannable form.
+          </p>
+          <p class="persona-quote">
+            "Show me what you've built. If I have to dig, I'll close the tab."
+          </p>
+        </div>
+      </div>
+
+      <div class="figure reveal">
+        <img src="media/akaflieg/user-journey.png" alt="User journey map for both personas">
+        <div class="figure-cap">Journey maps for both personas across the Join Us and Sponsors flows.</div>
+      </div>
+    </section>
+
+    <section id="develop">
+      <div class="section-head reveal"><span class="section-marker red"></span><p class="section-label">04 · Develop</p></div>
+      <h2 class="section-title reveal">Crazy 8, then wireframes</h2>
+      <p class="section-body reveal">
+        We ran a Crazy 8 sprint to unlock the obvious metaphors fast. Different formats for joining requirements, different framings for the project list. After a merge discussion, two ideas stuck: a boarding-pass card for requirements, and a flight-path layout for project history.
+      </p>
+
+      <div class="figure-row" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="figure reveal">
+          <img src="media/akaflieg/crazy-8-1.png" alt="Crazy 8 sketches set 1">
+          <div class="figure-cap">Crazy 8 · round 1.</div>
+        </div>
+        <div class="figure reveal">
+          <img src="media/akaflieg/crazy-8-2.png" alt="Crazy 8 sketches set 2">
+          <div class="figure-cap">Crazy 8 · round 2.</div>
+        </div>
+        <div class="figure reveal">
+          <img src="media/akaflieg/crazy-8-3.png" alt="Crazy 8 sketches set 3">
+          <div class="figure-cap">Crazy 8 · round 3.</div>
+        </div>
+      </div>
+
+      <div class="figure reveal">
+        <img src="media/akaflieg/wireframe.png" alt="Low-fidelity wireframe of the new pages">
+        <div class="figure-cap">1.0 wireframe. Boarding-pass requirements, direct application button, project hierarchy.</div>
+      </div>
+    </section>
+
+    <section id="testing">
+      <div class="section-head reveal"><span class="section-marker"></span><p class="section-label">05 · Usability Studies</p></div>
+      <h2 class="section-title reveal">What testers said about the wireframe</h2>
+      <p class="section-body reveal">
+        We brought the wireframe in front of test users to see if the new structure landed. Three quotes captured the rest of the feedback.
+      </p>
+
+      <div class="quote-grid">
+        <div class="quote-card reveal">
+          "I really like seeing the requirements upfront in those sections. It saves me from hunting around and wasting time."
+        </div>
+        <div class="quote-card reveal">
+          "Replacing the hyperlinked email for sponsors with a contact form is much more convenient."
+        </div>
+        <div class="quote-card reveal">
+          "For the projects section, either limit which projects you present or try out a more compact design."
+        </div>
+      </div>
+    </section>
+
+    <section id="demo">
+      <div class="section-head reveal"><span class="section-marker yellow"></span><p class="section-label">06 · Deliver</p></div>
+      <h2 class="section-title reveal">High-fidelity design, before and after</h2>
+      <p class="section-body reveal">
+        Visual decisions stayed user-centric: each element had to earn its place. We did one extra iteration to strip purely decorative pieces. An airplane-window frame we'd added made the club page read like an airline, which wasn't the brief.
+      </p>
+
+      <div class="figure reveal">
+        <img src="media/akaflieg/mainpage-final.png" alt="Final redesigned Akaflieg main page">
+        <div class="figure-cap">The redesigned main page.</div>
+      </div>
+
+      <div class="gallery">
+        <div class="gallery-item reveal">
+          <img src="media/akaflieg/compare-1.png" alt="Before-and-after comparison: Join Us page">
+          <div class="gallery-cap">Join Us · Before &amp; After</div>
+        </div>
+        <div class="gallery-item reveal">
+          <img src="media/akaflieg/compare-2.png" alt="Before-and-after comparison: Sponsors page">
+          <div class="gallery-cap">Sponsors · Before &amp; After</div>
+        </div>
+        <div class="gallery-item reveal">
+          <img src="media/akaflieg/compare-3.png" alt="Before-and-after comparison: Projects section">
+          <div class="gallery-cap">Projects · Before &amp; After</div>
+        </div>
+      </div>
+
+      <p class="section-body reveal" style="margin-top:1.5rem">
+        Two video walkthroughs of the final design:
+      </p>
+      <div class="figure-row">
+        <div class="figure reveal" style="box-shadow: 6px 6px 0 var(--blue)">
+          <a href="https://youtu.be/Y2bOxQu-zkk" target="_blank" rel="noopener">
+            <img src="https://img.youtube.com/vi/Y2bOxQu-zkk/hqdefault.jpg" alt="Akaflieg walkthrough video 1">
+          </a>
+          <div class="figure-cap">Walkthrough · Join Us flow →</div>
+        </div>
+        <div class="figure reveal" style="box-shadow: 6px 6px 0 var(--red)">
+          <a href="https://youtu.be/FqBSrjB8TOI" target="_blank" rel="noopener">
+            <img src="https://img.youtube.com/vi/FqBSrjB8TOI/hqdefault.jpg" alt="Akaflieg walkthrough video 2">
+          </a>
+          <div class="figure-cap">Walkthrough · Sponsors flow →</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="reflection">
+      <div class="section-head reveal"><span class="section-marker red"></span><p class="section-label">07 · Reflection</p></div>
+      <h2 class="section-title reveal">What I took away</h2>
+
+      <div class="figure reveal">
+        <img src="media/akaflieg/lesson-learned.png" alt="Decorative-stripping iteration: airplane window removed">
+        <div class="figure-cap">The decorative-stripping iteration — airplane-window frame removed.</div>
+      </div>
+
+      <div class="reflection-grid">
+        <div class="reflection-card learned reveal">
+          <div class="reflection-label">What worked</div>
+          <ul>
+            <li>Locking scope to two pages and two user groups. Refusing to expand kept the redesign shippable.</li>
+            <li>Boarding-pass requirements and the flight-path narrative. Concrete metaphors did more work than any visual styling.</li>
+            <li>The decorative-stripping pass. Removing the airplane window restored the club's identity over a generic aviation aesthetic.</li>
+          </ul>
+        </div>
+        <div class="reflection-card next reveal">
+          <div class="reflection-label">What I'd do differently</div>
+          <ul>
+            <li>Recruit real prospective members instead of role-playing. Role-play caught structure issues, but missed the lived friction that interviews would have surfaced.</li>
+            <li>Test the hi-fi prototype with sponsors, not just members. The two groups read the same page differently.</li>
+            <li>Prototype the sponsor contact form end-to-end, not just the button placement. The form is where conversion actually happens.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="client-feedback reveal">
+        <strong>Client feedback.</strong> Akaflieg believes the redesigned Join Us and Sponsors pages can attract new members and engage potential sponsors. They are willing to continue collaborating to extend the redesign across the rest of the site.
+      </div>
+    </section>
+
+  </div>
+
+  <div class="cta-section">
+    <div class="cta-box">
+      <h2 class="reveal">Want the full process?</h2>
+      <p class="reveal">The Notion page has the desk research, journey maps, and Crazy 8 sketches in full. Happy to walk through the trade-offs in person.</p>
+      <div class="cta-buttons reveal">
+        <a href="https://www.akaflieg.vo.tum.de/en/" target="_blank" rel="noopener" class="btn btn-primary">Akaflieg Site →</a>
+        <a href="index.html#contact" class="btn btn-blue">Get in Touch</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Hui Wang · Akaflieg Case Study · <a href="index.html">Back to Portfolio</a></p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver(
+      entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') }),
+      { threshold: 0.08 }
+    )
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el))
+  </script>
+
+</body>
+</html>

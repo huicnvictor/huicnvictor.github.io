@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Safety Buddy — Case Study · Hui Wang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Archivo+Black&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #F5F0E8;
+      --ink: #1A1A1A;
+      --red: #E63946;
+      --blue: #2D5FD8;
+      --yellow: #FFD43B;
+      --line: 2.5px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+    a { color: inherit; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 6%;
+      background: var(--bg);
+      border-bottom: var(--line) solid var(--ink);
+    }
+    .nav-back {
+      display: flex; align-items: center; gap: 0.4rem;
+      text-decoration: none;
+      font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding-bottom: 4px; position: relative;
+    }
+    .nav-back::after {
+      content: ''; position: absolute; left: 0; bottom: 0;
+      width: 0; height: 3px; background: var(--blue);
+      transition: width 0.2s;
+    }
+    .nav-back:hover::after { width: 100%; }
+    .nav-back svg { width: 14px; height: 14px; }
+    .nav-logo {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1rem; letter-spacing: 0.06em;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .nav-logo .dot { width: 12px; height: 12px; background: var(--red); }
+    .nav-status {
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--ink);
+      background: var(--yellow);
+      border: var(--line) solid var(--ink);
+      padding: 0.3rem 0.7rem;
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .status-dot { width: 8px; height: 8px; background: var(--red); animation: blink 1.4s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 8rem 6% 5rem;
+      position: relative; overflow: hidden;
+    }
+    .geo { position: absolute; pointer-events: none; z-index: 0; }
+    .geo-circle {
+      width: 220px; height: 220px;
+      background: var(--red);
+      border: var(--line) solid var(--ink);
+      border-radius: 50%;
+      top: 10%; right: -60px;
+    }
+    .geo-square {
+      width: 100px; height: 100px;
+      background: var(--blue);
+      border: var(--line) solid var(--ink);
+      bottom: 12%; left: 4%;
+      transform: rotate(-12deg);
+    }
+    .geo-triangle {
+      width: 0; height: 0;
+      border-left: 50px solid transparent;
+      border-right: 50px solid transparent;
+      border-bottom: 86px solid var(--yellow);
+      filter: drop-shadow(2.5px 2.5px 0 var(--ink));
+      bottom: 30%; right: 8%;
+    }
+    .geo-line-h {
+      position: absolute;
+      height: 4px; width: 90px;
+      background: var(--ink);
+      top: 22%; left: 4%;
+    }
+    .geo-dot {
+      position: absolute;
+      width: 14px; height: 14px;
+      background: var(--blue);
+      border-radius: 50%;
+      top: 30%; left: 12%;
+    }
+
+    .hero-inner {
+      position: relative; z-index: 1;
+      max-width: 1100px; width: 100%; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    }
+    @media(max-width:768px){.hero-inner{grid-template-columns:1fr;gap:2.5rem}}
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--ink);
+      background: var(--yellow);
+      border: var(--line) solid var(--ink);
+      padding: 0.4rem 0.9rem;
+      margin-bottom: 1.6rem;
+    }
+    .hero-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(2.6rem, 6vw, 4.8rem);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.2rem;
+      text-transform: uppercase;
+    }
+    .hero-title .accent { color: var(--red); }
+    .hero-tagline {
+      font-size: 1.05rem;
+      margin-bottom: 2rem;
+      max-width: 460px;
+      font-weight: 500;
+    }
+    .hero-meta-row {
+      display: flex; flex-wrap: wrap; gap: 1.6rem;
+      margin-bottom: 2rem;
+      font-size: 0.82rem; font-weight: 500;
+    }
+    .hero-meta-row span strong {
+      display: block;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 0.1rem;
+    }
+    .hero-cta { display: flex; gap: 0.9rem; flex-wrap: wrap; }
+    .btn {
+      padding: 0.85rem 1.7rem;
+      font-size: 0.85rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      text-decoration: none;
+      border: var(--line) solid var(--ink);
+      transition: transform 0.15s, box-shadow 0.15s;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      cursor: pointer;
+      background: var(--bg); color: var(--ink);
+    }
+    .btn-primary { background: var(--yellow); }
+    .btn-primary:hover { transform: translate(-3px,-3px); box-shadow: 6px 6px 0 var(--ink); }
+    .btn-outline { background: var(--bg); }
+    .btn-outline:hover { transform: translate(-3px,-3px); box-shadow: 6px 6px 0 var(--blue); }
+    .btn-blue { background: var(--blue); color: #fff; }
+    .btn-blue:hover { transform: translate(-3px,-3px); box-shadow: 6px 6px 0 var(--ink); }
+
+    .hero-visual {
+      background: var(--bg);
+      border: var(--line) solid var(--ink);
+      padding: 1rem;
+      box-shadow: 8px 8px 0 var(--ink);
+    }
+    .mockup-bar {
+      display: flex; align-items: center; gap: 0.4rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 2px solid var(--ink);
+      margin-bottom: 1rem;
+    }
+    .mockup-dot { width: 11px; height: 11px; border: 2px solid var(--ink); }
+    .mockup-title { font-size: 0.72rem; font-weight: 600; color: var(--ink); margin-left: auto; letter-spacing: 0.05em; }
+
+    .hero-image-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 11;
+      border: 2px solid var(--ink);
+      background: var(--bg);
+      overflow: hidden;
+    }
+    .hero-image-wrap img {
+      display: block;
+      width: 100%; height: 100%;
+      object-fit: contain;
+      background: var(--bg);
+    }
+
+    .stats-strip {
+      background: var(--ink);
+      color: #fff;
+      border-top: var(--line) solid var(--ink);
+      border-bottom: var(--line) solid var(--ink);
+      padding: 2.5rem 6%;
+    }
+    .stats-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; gap: 2rem; flex-wrap: wrap; justify-content: space-around;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 2.4rem;
+      letter-spacing: -0.02em;
+      color: var(--yellow);
+    }
+    .stat-item:nth-child(2) .stat-num { color: var(--red); }
+    .stat-item:nth-child(3) .stat-num { color: #fff; }
+    .stat-item:nth-child(4) .stat-num { color: var(--blue); }
+    .stat-lbl {
+      font-size: 0.7rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      margin-top: 0.4rem;
+    }
+
+    .content { max-width: 1100px; margin: 0 auto; padding: 0 6%; }
+    section { padding: 5rem 0; }
+    section + section { border-top: var(--line) solid var(--ink); }
+
+    .section-head {
+      display: flex; align-items: center; gap: 0.8rem;
+      margin-bottom: 0.7rem;
+    }
+    .section-marker {
+      width: 22px; height: 22px;
+      background: var(--blue);
+      border: var(--line) solid var(--ink);
+      flex-shrink: 0;
+    }
+    .section-marker.red { background: var(--red); border-radius: 50%; }
+    .section-marker.yellow {
+      background: transparent; border: none;
+      width: 0; height: 0;
+      border-left: 11px solid transparent;
+      border-right: 11px solid transparent;
+      border-bottom: 19px solid var(--yellow);
+      filter: drop-shadow(2px 2px 0 var(--ink));
+    }
+    .section-label {
+      font-size: 0.74rem; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+    }
+    .section-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+      line-height: 1; letter-spacing: -0.01em;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    .section-body {
+      font-size: 1rem;
+      max-width: 640px;
+      font-weight: 500;
+    }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+    @media(max-width:768px){.two-col{grid-template-columns:1fr}}
+
+    .pain-list { list-style: none; margin-top: 1.2rem; display: flex; flex-direction: column; gap: 1rem; }
+    .pain-item {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 1.1rem 1.3rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+      border-left: 8px solid var(--red);
+    }
+    .pain-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      width: 38px; height: 38px;
+      background: var(--bg);
+      border: var(--line) solid var(--ink);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pain-item p { font-size: 0.9rem; font-weight: 500; }
+    .pain-item strong {
+      display: block; margin-bottom: 0.2rem;
+      font-size: 0.95rem;
+      font-family: 'Archivo Black', sans-serif;
+      letter-spacing: -0.01em;
+    }
+
+    .insight-box {
+      margin-top: 2.5rem;
+      padding: 1.5rem 1.8rem;
+      background: var(--blue);
+      color: #fff;
+      border: var(--line) solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+    }
+    .insight-label {
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 0.6rem;
+    }
+    .insight-box p { font-size: 0.98rem; font-weight: 500; line-height: 1.55; }
+
+    .testing-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem;
+      margin-top: 1.5rem;
+    }
+    @media(max-width:600px){.testing-grid{grid-template-columns:1fr}}
+    .testing-card {
+      padding: 1.4rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+    }
+    .testing-card.features { border-top: 12px solid var(--blue); }
+    .testing-card.trust { border-top: 12px solid var(--red); }
+    .testing-label {
+      font-size: 0.74rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      margin-bottom: 0.7rem;
+    }
+    .testing-card ul {
+      list-style: none; display: flex; flex-direction: column; gap: 0.55rem;
+    }
+    .testing-card li {
+      font-size: 0.88rem; font-weight: 500;
+      display: flex; gap: 0.5rem;
+    }
+    .testing-card li::before {
+      content: '→';
+      font-family: 'Archivo Black', sans-serif;
+      color: var(--blue);
+      flex-shrink: 0;
+    }
+    .testing-card.trust li::before { color: var(--red); }
+
+    .figure {
+      margin-top: 1.6rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+      overflow: hidden;
+    }
+    .figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-bottom: var(--line) solid var(--ink);
+      background: var(--bg);
+    }
+    .figure-cap {
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.06em;
+      padding: 0.7rem 1rem;
+      background: var(--bg);
+      color: var(--ink);
+    }
+    .figure-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+      margin-top: 1.6rem;
+    }
+    @media(max-width:600px){.figure-row{grid-template-columns:1fr}}
+    .figure-row .figure { margin-top: 0; }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1.6rem;
+    }
+    .gallery-item {
+      background: #fff;
+      border: var(--line) solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .gallery-item:hover { transform: translate(-3px,-3px); box-shadow: 9px 9px 0 var(--blue); }
+    .gallery-item:nth-child(2n):hover { box-shadow: 9px 9px 0 var(--red); }
+    .gallery-item:nth-child(3n):hover { box-shadow: 9px 9px 0 var(--yellow); }
+    .gallery-item img {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: var(--bg);
+      border-bottom: var(--line) solid var(--ink);
+    }
+    .gallery-cap {
+      padding: 0.7rem 0.9rem;
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .reflection-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 1.5rem; }
+    @media(max-width:600px){.reflection-grid{grid-template-columns:1fr}}
+    .reflection-card {
+      padding: 1.6rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+    }
+    .reflection-card.learned { border-top: 12px solid var(--blue); }
+    .reflection-card.next { border-top: 12px solid var(--red); }
+    .reflection-label {
+      font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      margin-bottom: 0.9rem;
+    }
+    .reflection-card ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .reflection-card li {
+      font-size: 0.9rem; font-weight: 500;
+      display: flex; gap: 0.6rem; align-items: flex-start;
+    }
+    .reflection-card li::before {
+      flex-shrink: 0;
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1rem; line-height: 1;
+      margin-top: 0.15rem;
+    }
+    .learned li::before { content: "✓"; color: var(--blue); }
+    .next li::before { content: "→"; color: var(--red); }
+
+    .volunteer-note {
+      margin-top: 2rem;
+      padding: 1.5rem 1.8rem;
+      background: var(--yellow);
+      border: var(--line) solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+      font-size: 0.95rem;
+      font-weight: 500;
+      font-style: italic;
+    }
+    .volunteer-note strong { font-style: normal; font-family: 'Archivo Black', sans-serif; letter-spacing: -0.01em; }
+
+    .cta-section {
+      background: var(--ink);
+      border-top: var(--line) solid var(--ink);
+    }
+    .cta-box {
+      max-width: 700px; margin: 0 auto;
+      text-align: center;
+      padding: 5rem 6%;
+      color: #fff;
+    }
+    .cta-box h2 {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 2rem;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+      color: #fff;
+    }
+    .cta-box p { margin-bottom: 2rem; font-weight: 500; color: #d8d4cc; }
+    .cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    footer {
+      text-align: center; padding: 1.8rem;
+      font-size: 0.74rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      border-top: var(--line) solid var(--ink);
+      background: var(--bg);
+    }
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+      border-bottom: 2px solid var(--blue);
+    }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+      Back
+    </a>
+    <div class="nav-logo"><span class="dot"></span>HUI WANG</div>
+    <div class="nav-status"><div class="status-dot"></div>UX Case</div>
+  </nav>
+
+  <section class="hero">
+    <span class="geo geo-circle"></span>
+    <span class="geo geo-square"></span>
+    <span class="geo geo-triangle"></span>
+    <span class="geo-line-h"></span>
+    <span class="geo-dot"></span>
+
+    <div class="hero-inner">
+      <div>
+        <div class="hero-eyebrow">🛡️ Case Study · UX Research</div>
+        <h1 class="hero-title">Safety<br>Buddy<span class="accent">.</span></h1>
+        <p class="hero-tagline">
+          An interactive scam-detection app for older adults, built with Munich's DigitaleHilfe. The first prototype failed in testing, so we went back to the interviews and rebuilt the product around one practical problem.
+        </p>
+        <div class="hero-meta-row">
+          <span><strong>Role</strong>UX Research &amp; Design</span>
+          <span><strong>Partner</strong>DigitaleHilfe Munich</span>
+          <span><strong>Year</strong>2024</span>
+        </div>
+        <div class="hero-cta">
+          <a href="#prototype" class="btn btn-primary">See Prototype →</a>
+          <a href="#problem" class="btn btn-outline">Read Case</a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="mockup-bar">
+          <div class="mockup-dot" style="background:var(--red)"></div>
+          <div class="mockup-dot" style="background:var(--yellow)"></div>
+          <div class="mockup-dot" style="background:var(--blue)"></div>
+          <span class="mockup-title">Safety Buddy · Concept</span>
+        </div>
+        <div class="hero-image-wrap">
+          <img src="media/safety-buddy/cover.png" alt="Safety Buddy concept cover">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="stats-strip">
+    <div class="stats-inner">
+      <div class="stat-item"><div class="stat-num">2</div><div class="stat-lbl">Design Iterations</div></div>
+      <div class="stat-item"><div class="stat-num">1</div><div class="stat-lbl">NGO Partner</div></div>
+      <div class="stat-item"><div class="stat-num">3</div><div class="stat-lbl">Core Features</div></div>
+      <div class="stat-item"><div class="stat-num">✓</div><div class="stat-lbl">Joined as Volunteer</div></div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <section id="problem">
+      <div class="two-col">
+        <div>
+          <div class="section-head reveal"><span class="section-marker red"></span><p class="section-label">01 · The Brief</p></div>
+          <h2 class="section-title reveal">How do you help older adults in a digital world?</h2>
+          <p class="section-body reveal">
+            That was the prompt. It was wide. So we started with interviews and observation, looking for the specific places the digital world breaks for seniors.
+          </p>
+          <p class="section-body reveal" style="margin-top:1rem">
+            What came back was a mix of motor friction, social isolation, and a quiet, growing exposure to scams. Every participant had been targeted at least once. Every participant said they wanted someone to walk them through things.
+          </p>
+        </div>
+        <div>
+          <ul class="pain-list">
+            <li class="pain-item reveal">
+              <span class="pain-icon">👆</span>
+              <div>
+                <strong>Single-finger tap</strong>
+                <p>Older users navigate one finger at a time. Multi-touch gestures and small targets miss.</p>
+              </div>
+            </li>
+            <li class="pain-item reveal">
+              <span class="pain-icon">🤝</span>
+              <div>
+                <strong>They want a person, not a product</strong>
+                <p>Interviewees described real value in one-on-one help: someone explaining, walking through, going at their pace.</p>
+              </div>
+            </li>
+            <li class="pain-item reveal">
+              <span class="pain-icon">📧</span>
+              <div>
+                <strong>Scams are everywhere</strong>
+                <p>Every interviewee had received scam emails or messages. Most couldn't say which signals to trust.</p>
+              </div>
+            </li>
+            <li class="pain-item reveal">
+              <span class="pain-icon">🫥</span>
+              <div>
+                <strong>Loneliness in the background</strong>
+                <p>Across the group, loneliness showed up to different degrees, often making people more willing to engage with whoever reached out — including scammers.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="insight-box reveal">
+        <div class="insight-label">Point of View</div>
+        <p>Trying to fix "the digital world" for seniors is a trap. Pick one practical problem they actually feel every week, and build the relationship through that.</p>
+      </div>
+    </section>
+
+    <section id="research">
+      <div class="section-head reveal"><span class="section-marker"></span><p class="section-label">02 · Research Findings</p></div>
+      <h2 class="section-title reveal">Who we talked to, and what we watched</h2>
+      <p class="section-body reveal">
+        Semi-structured interviews on one side, short observation sessions on the other. Two findings came back strong enough to design around: a recurring persona, and a clear pattern in how older fingers actually move on a phone.
+      </p>
+
+      <div class="figure reveal">
+        <img src="media/safety-buddy/persona.png" alt="Persona of an older adult user">
+        <div class="figure-cap">Composite persona built from interview reports.</div>
+      </div>
+
+      <div class="figure-row">
+        <div class="figure reveal">
+          <img src="media/safety-buddy/behaviors-1.png" alt="Behavioral observation: single-finger tap">
+          <div class="figure-cap">Behavioral observation · single-finger tap.</div>
+        </div>
+        <div class="figure reveal">
+          <img src="media/safety-buddy/behaviors-2.png" alt="Behavioral observation: reduced touch sensitivity">
+          <div class="figure-cap">Behavioral observation · reduced touch sensitivity.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="iteration-1">
+      <div class="section-head reveal"><span class="section-marker"></span><p class="section-label">03 · First Iteration</p></div>
+      <h2 class="section-title reveal">One size doesn't fit all</h2>
+      <p class="section-body reveal">
+        We took the "one-on-one support" insight literally. The first concept was a flexible AI-powered robotic arm with a camera, sitting beside the user, watching the screen, giving spoken guidance step by step. Cheaper than a full robot, and closer to the personal-assistant feel the interviews had asked for.
+      </p>
+
+      <div class="figure-row">
+        <div class="figure reveal">
+          <img src="media/safety-buddy/drawing-hand.jpg" alt="Initial sketch of the robotic arm concept">
+          <div class="figure-cap">Initial sketch · the camera-on-arm idea.</div>
+        </div>
+        <div class="figure reveal">
+          <img src="media/safety-buddy/robotic-hand.png" alt="Concept render of the robotic arm">
+          <div class="figure-cap">Concept render of the same idea.</div>
+        </div>
+      </div>
+
+      <div class="figure-row">
+        <div class="figure reveal">
+          <img src="media/safety-buddy/prototype-render.png" alt="Built physical prototype of the robotic arm">
+          <div class="figure-cap">The built prototype, ready for testing.</div>
+        </div>
+        <div class="figure reveal">
+          <img src="media/safety-buddy/prototype-real-world.png" alt="Robotic arm prototype in real-world test">
+          <div class="figure-cap">In testing — the blockers showed up immediately.</div>
+        </div>
+      </div>
+
+      <div class="figure reveal">
+        <img src="media/safety-buddy/testing-issue.png" alt="Documented issues during prototype testing">
+        <div class="figure-cap">What broke during testing.</div>
+      </div>
+
+      <div class="testing-grid">
+        <div class="testing-card features reveal">
+          <div class="testing-label">What worked</div>
+          <ul>
+            <li>The personal-assistant framing matched what interviewees said they wanted.</li>
+            <li>Spoken step-by-step guidance felt closer to a person than to an app.</li>
+            <li>The arm-plus-camera form factor stayed cheaper than a humanoid robot.</li>
+          </ul>
+        </div>
+        <div class="testing-card trust reveal">
+          <div class="testing-label">What broke</div>
+          <ul>
+            <li>The arm blocked the user's line of sight to the screen during use.</li>
+            <li>No good position to mount the camera without obstructing the hand.</li>
+            <li>The hardware path was technically heavy for a project of our scope.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="pivot">
+      <div class="section-head reveal"><span class="section-marker yellow"></span><p class="section-label">04 · Back to the Interviews</p></div>
+      <h2 class="section-title reveal">Re-reading the transcripts</h2>
+      <p class="section-body reveal">
+        Killing the robotic arm forced a question: what is the one problem these users actually feel, repeatedly, that a small team can ship? We re-coded the interview reports looking for frequency, not novelty.
+      </p>
+
+      <div class="figure-row" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="figure reveal">
+          <img src="media/safety-buddy/scam-example-1.png" alt="Scam message example 1">
+          <div class="figure-cap">Real scam message · sample 1.</div>
+        </div>
+        <div class="figure reveal">
+          <img src="media/safety-buddy/scam-example-2.png" alt="Scam message example 2">
+          <div class="figure-cap">Real scam message · sample 2.</div>
+        </div>
+        <div class="figure reveal">
+          <img src="media/safety-buddy/scam-example-3.png" alt="Scam message example 3">
+          <div class="figure-cap">Real scam message · sample 3.</div>
+        </div>
+      </div>
+
+      <div class="insight-box reveal">
+        <div class="insight-label">Reframed Problem</div>
+        <p>Every older adult we interviewed had encountered scam emails or messages, and every one reported some loneliness. Scam exposure is the practical problem. Loneliness is why "a buddy" was the right form factor.</p>
+      </div>
+    </section>
+
+    <section id="solution">
+      <div class="section-head reveal"><span class="section-marker red"></span><p class="section-label">05 · Second Iteration</p></div>
+      <h2 class="section-title reveal">Scam blocker + learning platform + a buddy</h2>
+      <p class="section-body reveal">
+        We dropped the hardware and built an app that does three things together. It labels suspicious messages and explains why they're suspicious. It turns those same messages into a learning path so the user gets better at spotting scams on their own. And a character — Safety Buddy — walks them through every feature so the app feels like company, not a wall of settings.
+      </p>
+
+      <p class="section-body reveal" style="margin-top:1rem">
+        The three layers cover the three findings: scams (practical), learning (long-term value), buddy (loneliness).
+      </p>
+    </section>
+
+    <section id="prototype">
+      <div class="section-head reveal"><span class="section-marker"></span><p class="section-label">06 · High-fidelity Prototype</p></div>
+      <h2 class="section-title reveal">The app, rebuilt around one problem</h2>
+      <p class="section-body reveal">
+        Three flows in the prototype: a real-time scam alert layered on top of the inbox, a learning path with simulated scams the user can practice on, and Safety Buddy as the constant companion across everything.
+      </p>
+
+      <div class="gallery">
+        <div class="gallery-item reveal">
+          <img src="media/safety-buddy/safety-buddy-mascot.png" alt="Safety Buddy mascot character">
+          <div class="gallery-cap">Safety Buddy · Companion Character</div>
+        </div>
+        <div class="gallery-item reveal">
+          <img src="media/safety-buddy/word-puzzle.png" alt="Word puzzle learning game">
+          <div class="gallery-cap">Word Puzzle · Vocabulary Learning</div>
+        </div>
+        <div class="gallery-item reveal">
+          <img src="media/safety-buddy/learning-path.png" alt="Learning path with scam simulations and email alerts">
+          <div class="gallery-cap">Learning Path · Simulations · Email Alerts</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="reflection">
+      <div class="section-head reveal"><span class="section-marker yellow"></span><p class="section-label">07 · Reflection</p></div>
+      <h2 class="section-title reveal">What I took away</h2>
+
+      <div class="reflection-grid">
+        <div class="reflection-card learned reveal">
+          <div class="reflection-label">What worked</div>
+          <ul>
+            <li>Killing the robotic arm early. The hardware blockers weren't going to go away, and pretending otherwise would have eaten the whole project timeline.</li>
+            <li>Going back to the same interview reports instead of running a new round. The signal was already there, we just hadn't ranked it yet.</li>
+            <li>Treating loneliness as a product constraint, not a separate problem. Safety Buddy as a character carried emotional weight a flat utility app couldn't.</li>
+          </ul>
+        </div>
+        <div class="reflection-card next reveal">
+          <div class="reflection-label">What I'd do differently</div>
+          <ul>
+            <li>Run a feasibility check on the hardware idea before building the prototype, not after. Two of the three blockers were knowable on day one.</li>
+            <li>Recruit older adults into the testing loop for both iterations, not just the final flow. Their feedback would have killed the arm faster.</li>
+            <li>Prototype the scam-explanation flow at higher fidelity. That's the moment of value, and it deserved more design time than the mascot did.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="volunteer-note reveal">
+        <strong>Postscript.</strong> The project pulled me into the topic for real. I now volunteer at DigitaleHilfe in Munich, helping older adults with their devices in person.
+      </div>
+    </section>
+
+  </div>
+
+  <div class="cta-section">
+    <div class="cta-box">
+      <h2 class="reveal">Want the full process?</h2>
+      <p class="reveal">The Notion page has the interview reports, the 1.0 prototype post-mortem, and the full Safety Buddy flow. Happy to walk through the trade-offs in person.</p>
+      <div class="cta-buttons reveal">
+        <a href="https://digitalehilfe-muc.de/" target="_blank" rel="noopener" class="btn btn-primary">DigitaleHilfe →</a>
+        <a href="index.html#contact" class="btn btn-blue">Get in Touch</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Hui Wang · Safety Buddy Case Study · <a href="index.html">Back to Portfolio</a></p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver(
+      entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') }),
+      { threshold: 0.08 }
+    )
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el))
+  </script>
+
+</body>
+</html>

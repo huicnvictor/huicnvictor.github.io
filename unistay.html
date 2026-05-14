@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniStay — Case Study · Hui Wang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Archivo+Black&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #F5F0E8;
+      --ink: #1A1A1A;
+      --red: #E63946;
+      --blue: #2D5FD8;
+      --yellow: #FFD43B;
+      --line: 2.5px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+    a { color: inherit; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 6%;
+      background: var(--bg);
+      border-bottom: var(--line) solid var(--ink);
+    }
+    .nav-back {
+      display: flex; align-items: center; gap: 0.4rem;
+      text-decoration: none;
+      font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding-bottom: 4px; position: relative;
+    }
+    .nav-back::after {
+      content: ''; position: absolute; left: 0; bottom: 0;
+      width: 0; height: 3px; background: var(--blue);
+      transition: width 0.2s;
+    }
+    .nav-back:hover::after { width: 100%; }
+    .nav-back svg { width: 14px; height: 14px; }
+    .nav-logo {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1rem; letter-spacing: 0.06em;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .nav-logo .dot { width: 12px; height: 12px; background: var(--red); }
+    .nav-status {
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--ink);
+      background: var(--yellow);
+      border: var(--line) solid var(--ink);
+      padding: 0.3rem 0.7rem;
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .status-dot {
+      width: 8px; height: 8px; background: var(--red);
+      animation: blink 1.4s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 8rem 6% 5rem;
+      position: relative; overflow: hidden;
+    }
+    .geo { position: absolute; pointer-events: none; z-index: 0; }
+    .geo-circle {
+      width: 220px; height: 220px;
+      background: var(--red);
+      border: var(--line) solid var(--ink);
+      border-radius: 50%;
+      top: 10%; right: -60px;
+    }
+    .geo-square {
+      width: 100px; height: 100px;
+      background: var(--blue);
+      border: var(--line) solid var(--ink);
+      bottom: 12%; left: 4%;
+      transform: rotate(-12deg);
+    }
+    .geo-triangle {
+      width: 0; height: 0;
+      border-left: 50px solid transparent;
+      border-right: 50px solid transparent;
+      border-bottom: 86px solid var(--yellow);
+      filter: drop-shadow(2.5px 2.5px 0 var(--ink));
+      bottom: 30%; right: 8%;
+    }
+    .geo-line-h {
+      position: absolute;
+      height: 4px; width: 90px;
+      background: var(--ink);
+      top: 22%; left: 4%;
+    }
+    .geo-dot {
+      position: absolute;
+      width: 14px; height: 14px;
+      background: var(--blue);
+      border-radius: 50%;
+      top: 30%; left: 12%;
+    }
+
+    .hero-inner {
+      position: relative; z-index: 1;
+      max-width: 1100px; width: 100%; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    }
+    @media(max-width:768px){.hero-inner{grid-template-columns:1fr;gap:2.5rem}}
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--ink);
+      background: var(--yellow);
+      border: var(--line) solid var(--ink);
+      padding: 0.4rem 0.9rem;
+      margin-bottom: 1.6rem;
+    }
+    .hero-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(2.6rem, 6vw, 4.8rem);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.2rem;
+      text-transform: uppercase;
+    }
+    .hero-title .accent { color: var(--red); }
+    .hero-tagline {
+      font-size: 1.05rem;
+      margin-bottom: 2rem;
+      max-width: 460px;
+      font-weight: 500;
+    }
+    .hero-meta-row {
+      display: flex; flex-wrap: wrap; gap: 1.6rem;
+      margin-bottom: 2rem;
+      font-size: 0.82rem; font-weight: 500;
+    }
+    .hero-meta-row span strong {
+      display: block;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 0.1rem;
+    }
+    .hero-cta { display: flex; gap: 0.9rem; flex-wrap: wrap; }
+    .btn {
+      padding: 0.85rem 1.7rem;
+      font-size: 0.85rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      text-decoration: none;
+      border: var(--line) solid var(--ink);
+      transition: transform 0.15s, box-shadow 0.15s;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      cursor: pointer;
+      background: var(--bg); color: var(--ink);
+    }
+    .btn-primary { background: var(--yellow); }
+    .btn-primary:hover { transform: translate(-3px,-3px); box-shadow: 6px 6px 0 var(--ink); }
+    .btn-outline { background: var(--bg); }
+    .btn-outline:hover { transform: translate(-3px,-3px); box-shadow: 6px 6px 0 var(--blue); }
+    .btn-blue { background: var(--blue); color: #fff; }
+    .btn-blue:hover { transform: translate(-3px,-3px); box-shadow: 6px 6px 0 var(--ink); }
+
+    /* Hero visual = YouTube demo */
+    .hero-visual {
+      background: var(--bg);
+      border: var(--line) solid var(--ink);
+      padding: 1rem;
+      box-shadow: 8px 8px 0 var(--ink);
+    }
+    .mockup-bar {
+      display: flex; align-items: center; gap: 0.4rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 2px solid var(--ink);
+      margin-bottom: 1rem;
+    }
+    .mockup-dot { width: 11px; height: 11px; border: 2px solid var(--ink); }
+    .mockup-title { font-size: 0.72rem; font-weight: 600; color: var(--ink); margin-left: auto; letter-spacing: 0.05em; }
+
+    .video-wrap {
+      position: relative;
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 2px solid var(--ink);
+      background: #000;
+      overflow: hidden;
+      text-decoration: none;
+    }
+    .video-wrap img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.2s;
+    }
+    .video-wrap .play-btn {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 68px; height: 68px;
+      background: var(--red);
+      border: var(--line) solid var(--ink);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+      font-size: 1.6rem;
+      box-shadow: 4px 4px 0 var(--ink);
+      transition: transform 0.15s, box-shadow 0.15s;
+      padding-left: 4px;
+    }
+    .video-wrap:hover img { transform: scale(1.03); }
+    .video-wrap:hover .play-btn { transform: translate(calc(-50% - 3px), calc(-50% - 3px)); box-shadow: 7px 7px 0 var(--ink); }
+
+    /* ── STATS STRIP ── */
+    .stats-strip {
+      background: var(--ink);
+      color: #fff;
+      border-top: var(--line) solid var(--ink);
+      border-bottom: var(--line) solid var(--ink);
+      padding: 2.5rem 6%;
+    }
+    .stats-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; gap: 2rem; flex-wrap: wrap; justify-content: space-around;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 2.4rem;
+      letter-spacing: -0.02em;
+      color: var(--yellow);
+    }
+    .stat-item:nth-child(2) .stat-num { color: var(--red); }
+    .stat-item:nth-child(3) .stat-num { color: #fff; }
+    .stat-item:nth-child(4) .stat-num { color: var(--blue); }
+    .stat-lbl {
+      font-size: 0.7rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      margin-top: 0.4rem;
+    }
+
+    /* ── CONTENT ── */
+    .content { max-width: 1100px; margin: 0 auto; padding: 0 6%; }
+    section { padding: 5rem 0; }
+    section + section { border-top: var(--line) solid var(--ink); }
+
+    .section-head {
+      display: flex; align-items: center; gap: 0.8rem;
+      margin-bottom: 0.7rem;
+    }
+    .section-marker {
+      width: 22px; height: 22px;
+      background: var(--blue);
+      border: var(--line) solid var(--ink);
+      flex-shrink: 0;
+    }
+    .section-marker.red { background: var(--red); border-radius: 50%; }
+    .section-marker.yellow {
+      background: transparent; border: none;
+      width: 0; height: 0;
+      border-left: 11px solid transparent;
+      border-right: 11px solid transparent;
+      border-bottom: 19px solid var(--yellow);
+      filter: drop-shadow(2px 2px 0 var(--ink));
+    }
+    .section-label {
+      font-size: 0.74rem; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+    }
+    .section-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+      line-height: 1; letter-spacing: -0.01em;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    .section-body {
+      font-size: 1rem;
+      max-width: 640px;
+      font-weight: 500;
+    }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+    @media(max-width:768px){.two-col{grid-template-columns:1fr}}
+
+    /* Pain list (reused) */
+    .pain-list { list-style: none; margin-top: 1.2rem; display: flex; flex-direction: column; gap: 1rem; }
+    .pain-item {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 1.1rem 1.3rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+      border-left: 8px solid var(--red);
+    }
+    .pain-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      width: 38px; height: 38px;
+      background: var(--bg);
+      border: var(--line) solid var(--ink);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pain-item p { font-size: 0.9rem; font-weight: 500; }
+    .pain-item strong {
+      display: block; margin-bottom: 0.2rem;
+      font-size: 0.95rem;
+      font-family: 'Archivo Black', sans-serif;
+      letter-spacing: -0.01em;
+    }
+
+    .insight-box {
+      margin-top: 2.5rem;
+      padding: 1.5rem 1.8rem;
+      background: var(--blue);
+      color: #fff;
+      border: var(--line) solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+    }
+    .insight-label {
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 0.6rem;
+    }
+    .insight-box p { font-size: 0.98rem; font-weight: 500; line-height: 1.55; }
+
+    /* ── METHOD CARDS ── */
+    .method-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem; margin-top: 1.5rem;
+    }
+    .method-card {
+      padding: 1.3rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+    }
+    .method-card:nth-child(4n+1) { border-top: 10px solid var(--blue); }
+    .method-card:nth-child(4n+2) { border-top: 10px solid var(--red); }
+    .method-card:nth-child(4n+3) { border-top: 10px solid var(--yellow); }
+    .method-card:nth-child(4n)   { border-top: 10px solid var(--ink); }
+    .method-num {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 0.72rem; letter-spacing: 0.1em;
+      color: var(--red);
+      margin-bottom: 0.4rem;
+    }
+    .method-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1rem; letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+    .method-desc { font-size: 0.85rem; font-weight: 500; }
+
+    /* ── PERSONA ── */
+    .persona-card {
+      margin-top: 1.5rem;
+      display: grid; grid-template-columns: 1.1fr 1fr; gap: 1.6rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+      padding: 1.6rem;
+      align-items: center;
+    }
+    @media(max-width:600px){.persona-card{grid-template-columns:1fr}}
+    .persona-avatar {
+      width: 100%;
+      background: var(--bg);
+      border: var(--line) solid var(--ink);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .persona-avatar img { display: block; width: 100%; height: auto; }
+    .persona-tag {
+      display: inline-block;
+      font-size: 0.66rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      background: var(--yellow);
+      border: 2px solid var(--ink);
+      padding: 0.2rem 0.6rem;
+      margin-bottom: 0.5rem;
+    }
+    .persona-name {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1.3rem; letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+    .persona-quote {
+      font-size: 0.92rem; font-weight: 500;
+      font-style: italic;
+      padding-left: 0.9rem;
+      border-left: 4px solid var(--red);
+      margin-top: 0.7rem;
+    }
+
+    /* ── IMAGE FIGURE ── */
+    .figure {
+      margin-top: 1.6rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+      overflow: hidden;
+    }
+    .figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-bottom: var(--line) solid var(--ink);
+      background: var(--bg);
+    }
+    .figure-cap {
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.06em;
+      padding: 0.7rem 1rem;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    .figure-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+      margin-top: 1.6rem;
+    }
+    @media(max-width:600px){.figure-row{grid-template-columns:1fr}}
+    .figure-row .figure { margin-top: 0; }
+
+    /* ── TESTING RESULTS ── */
+    .testing-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem;
+      margin-top: 1.5rem;
+    }
+    @media(max-width:600px){.testing-grid{grid-template-columns:1fr}}
+    .testing-card {
+      padding: 1.4rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+    }
+    .testing-card.features { border-top: 12px solid var(--blue); }
+    .testing-card.trust { border-top: 12px solid var(--red); }
+    .testing-label {
+      font-size: 0.74rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      margin-bottom: 0.7rem;
+    }
+    .testing-card ul {
+      list-style: none; display: flex; flex-direction: column; gap: 0.55rem;
+    }
+    .testing-card li {
+      font-size: 0.88rem; font-weight: 500;
+      display: flex; gap: 0.5rem;
+    }
+    .testing-card li::before {
+      content: '→';
+      font-family: 'Archivo Black', sans-serif;
+      color: var(--blue);
+      flex-shrink: 0;
+    }
+    .testing-card.trust li::before { color: var(--red); }
+
+    /* ── PROTOTYPE GALLERY ── */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1.6rem;
+    }
+    .gallery-item {
+      background: #fff;
+      border: var(--line) solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .gallery-item:hover { transform: translate(-3px,-3px); box-shadow: 9px 9px 0 var(--blue); }
+    .gallery-item:nth-child(2n):hover { box-shadow: 9px 9px 0 var(--red); }
+    .gallery-item:nth-child(3n):hover { box-shadow: 9px 9px 0 var(--yellow); }
+    .gallery-item img {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: var(--bg);
+      border-bottom: var(--line) solid var(--ink);
+    }
+    .gallery-cap {
+      padding: 0.7rem 0.9rem;
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── REFLECTION ── */
+    .reflection-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 1.5rem; }
+    @media(max-width:600px){.reflection-grid{grid-template-columns:1fr}}
+    .reflection-card {
+      padding: 1.6rem;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+    }
+    .reflection-card.learned { border-top: 12px solid var(--blue); }
+    .reflection-card.next { border-top: 12px solid var(--red); }
+    .reflection-label {
+      font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      margin-bottom: 0.9rem;
+    }
+    .reflection-card ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .reflection-card li {
+      font-size: 0.9rem; font-weight: 500;
+      display: flex; gap: 0.6rem; align-items: flex-start;
+    }
+    .reflection-card li::before {
+      flex-shrink: 0;
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1rem; line-height: 1;
+      margin-top: 0.15rem;
+    }
+    .learned li::before { content: "✓"; color: var(--blue); }
+    .next li::before { content: "→"; color: var(--red); }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: var(--ink);
+      border-top: var(--line) solid var(--ink);
+    }
+    .cta-box {
+      max-width: 700px; margin: 0 auto;
+      text-align: center;
+      padding: 5rem 6%;
+      color: #fff;
+    }
+    .cta-box h2 {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 2rem;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+      color: #fff;
+    }
+    .cta-box p { margin-bottom: 2rem; font-weight: 500; color: #d8d4cc; }
+    .cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    footer {
+      text-align: center; padding: 1.8rem;
+      font-size: 0.74rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      border-top: var(--line) solid var(--ink);
+      background: var(--bg);
+    }
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+      border-bottom: 2px solid var(--blue);
+    }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+      Back
+    </a>
+    <div class="nav-logo"><span class="dot"></span>HUI WANG</div>
+    <div class="nav-status"><div class="status-dot"></div>UX Case</div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <span class="geo geo-circle"></span>
+    <span class="geo geo-square"></span>
+    <span class="geo geo-triangle"></span>
+    <span class="geo-line-h"></span>
+    <span class="geo-dot"></span>
+
+    <div class="hero-inner">
+      <div>
+        <div class="hero-eyebrow">🏠 Case Study · UX Research</div>
+        <h1 class="hero-title">Uni<br>Stay<span class="accent">.</span></h1>
+        <p class="hero-tagline">
+          A rental platform for foreign students in Taipei. Built around one finding from 11 interviews: trust is the only thing that matters when you rent from another country.
+        </p>
+        <div class="hero-meta-row">
+          <span><strong>Role</strong>UX Research &amp; Design</span>
+          <span><strong>Team</strong>Group of 4</span>
+          <span><strong>Year</strong>2024</span>
+        </div>
+        <div class="hero-cta">
+          <a href="#demo" class="btn btn-primary">Watch Demo →</a>
+          <a href="#problem" class="btn btn-outline">Read Case</a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="mockup-bar">
+          <div class="mockup-dot" style="background:var(--red)"></div>
+          <div class="mockup-dot" style="background:var(--yellow)"></div>
+          <div class="mockup-dot" style="background:var(--blue)"></div>
+          <span class="mockup-title">UniStay · Demo</span>
+        </div>
+        <a href="https://youtu.be/Oh1OmcX1Fwo" target="_blank" rel="noopener" class="video-wrap" aria-label="Watch UniStay demo on YouTube">
+          <img src="https://img.youtube.com/vi/Oh1OmcX1Fwo/hqdefault.jpg" alt="UniStay demo thumbnail">
+          <span class="play-btn">▶</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS STRIP -->
+  <div class="stats-strip">
+    <div class="stats-inner">
+      <div class="stat-item"><div class="stat-num">11</div><div class="stat-lbl">Student Interviews</div></div>
+      <div class="stat-item"><div class="stat-num">26</div><div class="stat-lbl">Survey Responses</div></div>
+      <div class="stat-item"><div class="stat-num">4</div><div class="stat-lbl">Core Pain Points</div></div>
+      <div class="stat-item"><div class="stat-num">8</div><div class="stat-lbl">Features Tested</div></div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- 01 PROBLEM -->
+    <section id="problem">
+      <div class="two-col">
+        <div>
+          <div class="section-head reveal"><span class="section-marker red"></span><p class="section-label">01 · The Problem</p></div>
+          <h2 class="section-title reveal">Foreign students can't tell who to trust</h2>
+          <p class="section-body reveal">
+            Taipei's rental market is scattered. Most listings live on local platforms or Facebook groups, in Chinese. International students arrive without language access, without a credit history that landlords recognize, and without a way to verify whether a listing or a landlord is real.
+          </p>
+          <p class="section-body reveal" style="margin-top:1rem">
+            Multiple news reports over the last decade have flagged rental scams. Hidden fees and inflated electricity charges are common. There is no central place where a student can check a landlord before signing.
+          </p>
+        </div>
+        <div>
+          <ul class="pain-list">
+            <li class="pain-item reveal">
+              <span class="pain-icon">📷</span>
+              <div>
+                <strong>Listings don't match reality</strong>
+                <p>Online photos and descriptions often differ from the actual room. Students fly in to find a different space.</p>
+              </div>
+            </li>
+            <li class="pain-item reveal">
+              <span class="pain-icon">👤</span>
+              <div>
+                <strong>Landlords are invisible</strong>
+                <p>There is almost no public information about the person renting the room. Trust has nowhere to attach.</p>
+              </div>
+            </li>
+            <li class="pain-item reveal">
+              <span class="pain-icon">📄</span>
+              <div>
+                <strong>Leases are a gamble</strong>
+                <p>Tenants don't know if the contract protects them. Most can't read the Chinese version anyway.</p>
+              </div>
+            </li>
+            <li class="pain-item reveal">
+              <span class="pain-icon">🔎</span>
+              <div>
+                <strong>Search filters are too weak</strong>
+                <p>Finding a place takes hours of scrolling because filters don't match what students actually care about.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="insight-box reveal">
+        <div class="insight-label">Point of View</div>
+        <p>Foreign students unfamiliar with Taiwan's rental market and legal protections need a platform with clear and transparent landlord, property, and legal information. Trust is the most important factor when renting in a foreign country.</p>
+      </div>
+    </section>
+
+    <!-- 02 RESEARCH METHOD -->
+    <section id="research">
+      <div class="section-head reveal"><span class="section-marker"></span><p class="section-label">02 · Research</p></div>
+      <h2 class="section-title reveal">Five methods, one question: where does trust break?</h2>
+      <p class="section-body reveal">
+        We mixed secondary research with primary interviews so the numbers and the stories check each other. Every design decision later in the project points back to one of these.
+      </p>
+
+      <div class="method-grid">
+        <div class="method-card reveal">
+          <div class="method-num">M1</div>
+          <div class="method-title">Desk Research</div>
+          <p class="method-desc">Ministry of Education data on international student growth. News coverage of rental scams over the past decade.</p>
+        </div>
+        <div class="method-card reveal">
+          <div class="method-num">M2</div>
+          <div class="method-title">Competitor Analysis</div>
+          <p class="method-desc">591, Facebook groups, Airbnb, My Room Abroad, NTU International House. Compared landlord profiles, verification, reviews, and legal support.</p>
+        </div>
+        <div class="method-card reveal">
+          <div class="method-num">M3</div>
+          <div class="method-title">Survey</div>
+          <p class="method-desc">26 participants, even gender split, 60% from Europe and Asia, matching the actual international-student population in Taiwan.</p>
+        </div>
+        <div class="method-card reveal">
+          <div class="method-num">M4</div>
+          <div class="method-title">Semi-structured Interview</div>
+          <p class="method-desc">11 international students plus 3 landlords. Covered information gathering, platform choice, the decision moment, and life after move-in.</p>
+        </div>
+        <div class="method-card reveal">
+          <div class="method-num">M5</div>
+          <div class="method-title">Iterative Coding</div>
+          <p class="method-desc">Coded interview transcripts in two passes to surface recurring themes and rank them by frequency and severity.</p>
+        </div>
+      </div>
+
+      <div class="figure-row">
+        <div class="figure reveal">
+          <img src="media/unistay/人数上升表格.png" alt="Chart: international students in Taiwan are increasing year over year">
+          <div class="figure-cap">International students in Taiwan are still growing post-pandemic.</div>
+        </div>
+        <div class="figure reveal">
+          <img src="media/unistay/扇形图表.png" alt="Pie chart of survey respondents by region">
+          <div class="figure-cap">Survey respondents by region. 60% from Europe and Asia.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 PERSONA + PAIN POINTS QUANTIFIED -->
+    <section>
+      <div class="section-head reveal"><span class="section-marker yellow"></span><p class="section-label">03 · Who We're Designing For</p></div>
+      <h2 class="section-title reveal">One persona, one core need</h2>
+      <p class="section-body reveal">
+        We combined interview themes into a single persona. Every pain point above points to the same underlying need: a way to verify what you're being told, before you sign anything.
+      </p>
+
+      <div class="persona-card reveal">
+        <div class="persona-avatar"><img src="media/unistay/Persona.png" alt="Persona deliverable"></div>
+        <div>
+          <span class="persona-tag">Primary Persona</span>
+          <div class="persona-name">The First-time International Renter</div>
+          <p style="font-size:0.92rem;font-weight:500">
+            Non-local student under 35, arriving in Taipei from Europe or Asia to study at a Taiwanese university. Reads English, not Chinese. Searches for housing online from their home country, weeks before they fly in.
+          </p>
+          <p class="persona-quote">
+            "I'm picking a place I've never seen, from a landlord I've never met, in a language I can't read. How do I know any of this is real?"
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 IDEATION + WIREFRAMES -->
+    <section>
+      <div class="section-head reveal"><span class="section-marker red"></span><p class="section-label">04 · Ideation &amp; 1.0 Prototype</p></div>
+      <h2 class="section-title reveal">From brainstorm to first wireframe</h2>
+      <p class="section-body reveal">
+        We ran an open brainstorm, then sorted ideas on a feasibility-vs-innovation quadrant. Anything high feasibility moved into the first wireframe. The wireframe went straight back to the same interviewees for functionality testing.
+      </p>
+
+      <div class="figure reveal">
+        <img src="media/unistay/Brainstorming.png" alt="Brainstorming quadrant analysis">
+        <div class="figure-cap">Feasibility (X) versus innovation (Y). Top-right and top-left ideas made the first build.</div>
+      </div>
+
+      <div class="figure reveal">
+        <img src="media/unistay/Wireframe.png" alt="Low-fidelity wireframe of the rental platform">
+        <div class="figure-cap">1.0 wireframe. Landlord profile, listing detail, lease checker, search filters.</div>
+      </div>
+    </section>
+
+    <!-- 05 USABILITY TESTING -->
+    <section>
+      <div class="section-head reveal"><span class="section-marker"></span><p class="section-label">05 · Usability Testing</p></div>
+      <h2 class="section-title reveal">What broke, and what we changed</h2>
+      <p class="section-body reveal">
+        We brought the same 11 interviewees back. Each rated 8 key design elements on importance and satisfaction (1–10), then talked us through what was clear and what was not. Two patterns came out fast.
+      </p>
+
+      <div class="testing-grid">
+        <div class="testing-card features reveal">
+          <div class="testing-label">Features feedback</div>
+          <ul>
+            <li>The map needed to show distance to school clearly, not just location.</li>
+            <li>Wording like "Online Contract Review" and "Legal Consultation" confused users. Labels rewritten.</li>
+            <li>Filters needed three layers, not one: interface, feature options, and price.</li>
+          </ul>
+        </div>
+        <div class="testing-card trust reveal">
+          <div class="testing-label">Trust feedback</div>
+          <ul>
+            <li>A landlord's self-introduction did not increase trust. Removed from the 2.0.</li>
+            <li>Users wanted a verification system — something the platform vouches for, not something the landlord says about themselves.</li>
+            <li>Recommendations from trusted sources (universities, past tenants) carried far more weight than badges.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 FINAL PROTOTYPE -->
+    <section id="demo">
+      <div class="section-head reveal"><span class="section-marker yellow"></span><p class="section-label">06 · 2.0 High-fidelity Prototype</p></div>
+      <h2 class="section-title reveal">The platform, rebuilt around trust</h2>
+      <p class="section-body reveal">
+        Two days of focused rebuild after the second round of testing. Every screen ties back to a specific finding from the interviews — verified landlords on the listing page, a contract page in English, a landlord page that shows third-party signals instead of self-claims.
+      </p>
+
+      <div class="gallery">
+        <div class="gallery-item reveal">
+          <img src="media/unistay/主页面1.png" alt="Home page, search and filters">
+          <div class="gallery-cap">Home · Search &amp; Filters</div>
+        </div>
+        <div class="gallery-item reveal">
+          <img src="media/unistay/主页面2.png" alt="Home page, map view">
+          <div class="gallery-cap">Home · Map View</div>
+        </div>
+        <div class="gallery-item reveal">
+          <img src="media/unistay/房屋页面.png" alt="Property detail page">
+          <div class="gallery-cap">Property Detail</div>
+        </div>
+        <div class="gallery-item reveal">
+          <img src="media/unistay/房东页面.png" alt="Landlord profile with verification">
+          <div class="gallery-cap">Landlord Profile</div>
+        </div>
+        <div class="gallery-item reveal">
+          <img src="media/unistay/合同页面.png" alt="Lease review page in English">
+          <div class="gallery-cap">Lease Review</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 REFLECTION -->
+    <section>
+      <div class="section-head reveal"><span class="section-marker red"></span><p class="section-label">07 · Reflection</p></div>
+      <h2 class="section-title reveal">What I'd take into the next project</h2>
+
+      <div class="reflection-grid">
+        <div class="reflection-card learned reveal">
+          <div class="reflection-label">What worked</div>
+          <ul>
+            <li>Letting the user say "trust" first, then organizing every feature around that word. The team stopped arguing about features once we agreed the underlying job was trust.</li>
+            <li>Bringing the same 11 interviewees back for testing 2.0. Familiarity with the product made their feedback sharper and faster.</li>
+            <li>Quantifying pain points after the qualitative round. Numbers helped us pick what to build first without losing the human reasoning behind it.</li>
+          </ul>
+        </div>
+        <div class="reflection-card next reveal">
+          <div class="reflection-label">What I'd do differently</div>
+          <ul>
+            <li>We talked to 3 landlords but the timeline pushed us to ship a tenant-only design. A two-sided product needs both sides in the prototype from day one.</li>
+            <li>Survey reach skewed toward students already in Taipei. Next time I'd recruit pre-arrival students directly, since that's where the trust problem actually lives.</li>
+            <li>The verification system was a finding, not a design. I'd prototype the verification flow itself, not just show a badge on the page.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <div class="cta-box">
+      <h2 class="reveal">Want the full research deck?</h2>
+      <p class="reveal">The Notion page has the raw interview data, persona artifact, and quadrant analysis. Happy to walk through the trade-offs in person.</p>
+      <div class="cta-buttons reveal">
+        <a href="https://www.notion.so/huiwangdesigns/UniStay-6ac44464d21f4ef5857c310593faf3b8" target="_blank" rel="noopener" class="btn btn-primary">Open Notion →</a>
+        <a href="index.html#contact" class="btn btn-blue">Get in Touch</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Hui Wang · UniStay Case Study · <a href="index.html">Back to Portfolio</a></p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver(
+      entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') }),
+      { threshold: 0.08 }
+    )
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el))
+  </script>
+
+</body>
+</html>
