@@ -301,77 +301,412 @@
       font-weight: 500;
     }
 
-    /* ── CERT ── */
+    /* ── CERT (Bauhaus · AI × UX) ── */
     #cert {
       background: var(--bg);
       border-top: var(--line) solid var(--ink);
       border-bottom: var(--line) solid var(--ink);
-    }
-    .cert-card {
-      max-width: 760px;
-      background: #fff;
-      border: var(--line) solid var(--ink);
-      padding: 2.5rem;
-      display: flex;
-      gap: 2rem;
-      align-items: flex-start;
       position: relative;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .cert-card:hover {
-      transform: translate(-4px, -4px);
-      box-shadow: 8px 8px 0 var(--red);
-    }
-    .cert-icon {
-      width: 80px; height: 80px;
-      background: var(--yellow);
-      border: var(--line) solid var(--ink);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.2rem;
-      flex-shrink: 0;
-    }
-    .cert-badge {
-      display: inline-block;
-      background: var(--red);
-      color: #fff;
-      padding: 0.3rem 0.8rem;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 0.8rem;
-      border: var(--line) solid var(--ink);
-    }
-    .cert-card h3 {
-      font-family: 'Archivo Black', sans-serif;
-      font-size: 1.3rem;
-      margin-bottom: 0.6rem;
-      letter-spacing: -0.01em;
-    }
-    .cert-card p { font-size: 0.95rem; }
-    .cert-progress-wrap { margin-top: 1.4rem; }
-    .cert-progress-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-    }
-    .cert-progress-bar {
-      height: 14px;
-      background: var(--bg);
-      border: var(--line) solid var(--ink);
       overflow: hidden;
     }
-    .cert-progress-fill {
+    .cert-deco {
+      position: absolute;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .cert-deco.circle-red {
+      width: 240px; height: 240px;
+      border-radius: 50%;
+      background: var(--red);
+      top: -100px; right: 5%;
+      border: var(--line) solid var(--ink);
+    }
+    .cert-deco.square-blue {
+      width: 90px; height: 90px;
+      background: var(--blue);
+      border: var(--line) solid var(--ink);
+      bottom: 80px; left: 3%;
+      transform: rotate(18deg);
+    }
+    .cert-deco.line-yellow {
+      width: 260px; height: 8px;
+      background: var(--yellow);
+      top: 38%; left: -40px;
+      transform: rotate(-14deg);
+      border-top: var(--line) solid var(--ink);
+      border-bottom: var(--line) solid var(--ink);
+    }
+    .cert-deco.dot-ink {
+      width: 16px; height: 16px;
+      background: var(--ink);
+      border-radius: 50%;
+      bottom: 24%; right: 12%;
+    }
+    #cert > *:not(.cert-deco) { position: relative; z-index: 1; }
+
+    .cert-headline {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(2.4rem, 6.5vw, 4.8rem);
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      text-transform: uppercase;
+      margin: 0.4rem 0 1rem;
+    }
+    .cert-headline .red-accent { color: var(--red); }
+    .cert-headline .times { color: var(--red); margin: 0 0.2rem; }
+    .cert-sub {
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin-bottom: 3.5rem;
+      color: var(--ink);
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .cert-sub::before {
+      content: '';
+      display: inline-block;
+      width: 40px; height: 3px;
+      background: var(--ink);
+    }
+
+    .cert-modules {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.8rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .cert-block {
+      border: var(--line) solid var(--ink);
+      background: #fff;
+      padding: 2rem 1.8rem;
+      position: relative;
+      transition: transform 0.25s cubic-bezier(0.85, 0, 0.15, 1),
+                  box-shadow 0.25s cubic-bezier(0.85, 0, 0.15, 1);
+    }
+    .cert-block.ux { --c: var(--blue); }
+    .cert-block.ai { --c: var(--red); }
+
+    .cert-block:hover {
+      transform: translate(-6px, -6px);
+      box-shadow: 6px 6px 0 var(--c), 12px 12px 0 var(--ink);
+    }
+
+    .block-tag {
+      display: inline-block;
+      background: var(--ink);
+      color: #fff;
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      padding: 0.55rem 0.9rem;
+      text-transform: uppercase;
+      margin-bottom: 1.6rem;
+      border: var(--line) solid var(--ink);
+    }
+    .cert-block.ai .block-tag { background: var(--red); color: #fff; }
+    .cert-block.ux .block-tag { background: var(--blue); color: #fff; }
+
+    .block-visual {
+      height: 200px;
+      background: #fff;
+      border: var(--line) solid var(--ink);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 1.8rem;
+    }
+
+    /* UX wireframe stage */
+    .ux-stage { position: absolute; inset: 16px; display: flex; flex-direction: column; gap: 10px; }
+    .wf-bar {
+      border: var(--line) solid var(--ink);
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 0.5s cubic-bezier(0.6, 0, 0.4, 1.3);
+    }
+    .cert-block.ux.visible .wf-bar { transform: scaleX(1); }
+    .cert-block.ux.visible .wf-bar.b1 { transition-delay: 0.05s; }
+    .cert-block.ux.visible .wf-bar.b2 { transition-delay: 0.15s; }
+    .cert-block.ux.visible .wf-bar.b3 { transition-delay: 0.2s; }
+    .cert-block.ux.visible .wf-bar.b4 { transition-delay: 0.25s; }
+    .cert-block.ux.visible .wf-bar.b5 { transition-delay: 0.35s; }
+    .cert-block.ux.visible .wf-bar.b6 { transition-delay: 0.4s; }
+    .wf-h { height: 18px; width: 65%; background: var(--ink); }
+    .wf-row { display: flex; gap: 8px; transform: none !important; border: none; }
+    .wf-row .wf-bar { transform: scaleX(0); transform-origin: left center; }
+    .cert-block.ux.visible .wf-row .wf-bar { transform: scaleX(1); }
+    .wf-box { height: 56px; flex: 1; background: var(--blue); }
+    .wf-line { height: 10px; background: var(--ink); }
+    .wf-line.thin { height: 6px; background: #c8c8c8; border-color: var(--ink); }
+
+    /* AI Kandinsky stage */
+    .ai-stage { position: absolute; inset: 0; }
+    .ai-shape {
+      opacity: 0;
+      transform: scale(0);
+      transform-origin: center;
+      transform-box: fill-box;
+      transition: opacity 0.35s ease,
+                  transform 0.5s cubic-bezier(0.6, 0, 0.4, 1.3);
+    }
+    .cert-block.ai.visible .ai-shape { opacity: 1; transform: scale(1); }
+    .cert-block.ai.visible .ai-shape.s1 { transition-delay: 0.05s; }
+    .cert-block.ai.visible .ai-shape.s2 { transition-delay: 0.18s; }
+    .cert-block.ai.visible .ai-shape.s3 { transition-delay: 0.3s; }
+    .cert-block.ai.visible .ai-shape.s4 { transition-delay: 0.42s; }
+    .cert-block.ai.visible .ai-shape.s5 { transition-delay: 0.54s; }
+    .cert-block.ai.visible .ai-shape.s6 { transition-delay: 0.66s; }
+    .cert-block.ai.visible .ai-shape.s7 { transition-delay: 0.78s; }
+
+    .block-pct {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 4.2rem;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: var(--c);
+      margin-bottom: 0.4rem;
+    }
+    .block-pct span { font-size: 1.8rem; color: var(--ink); margin-left: 4px; }
+    .block-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1.05rem;
+      margin-bottom: 0.4rem;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    .block-desc {
+      font-size: 0.88rem;
+      line-height: 1.55;
+      color: var(--ink);
+      opacity: 0.75;
+      margin-bottom: 1.4rem;
+    }
+    .block-progress {
+      height: 18px;
+      border: var(--line) solid var(--ink);
+      background: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .block-progress-fill {
       height: 100%;
       width: 0;
+      background: var(--c);
+      transition: width 1.4s cubic-bezier(0.85, 0, 0.15, 1);
+    }
+    .cert-progress-fill { height: 100%; width: 0; }
+
+    /* Fusion bar */
+    .cert-fusion {
+      background: var(--yellow);
+      border: var(--line) solid var(--ink);
+      padding: 2.2rem 2.4rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      position: relative;
+      transition: transform 0.25s cubic-bezier(0.85, 0, 0.15, 1),
+                  box-shadow 0.25s cubic-bezier(0.85, 0, 0.15, 1);
+    }
+    .cert-fusion:hover {
+      transform: translate(-6px, -6px);
+      box-shadow: 6px 6px 0 var(--red), 12px 12px 0 var(--ink);
+    }
+    .fusion-mark {
+      width: 84px; height: 84px;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .fusion-mark .f-shape {
+      position: absolute;
+      border: var(--line) solid var(--ink);
+    }
+    .fusion-mark .f-shape.circ {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: var(--blue);
+      top: 0; left: 0;
+    }
+    .fusion-mark .f-shape.sq {
+      width: 56px; height: 56px;
       background: var(--red);
-      transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+      bottom: 0; right: 0;
+    }
+    .fusion-text { flex: 1; }
+    .fusion-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(1.8rem, 4.5vw, 3rem);
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      text-transform: uppercase;
+    }
+    .fusion-title .times { color: var(--red); margin: 0 0.4rem; }
+    .fusion-caption {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin-top: 0.6rem;
+      color: var(--ink);
+    }
+    .fusion-stamp {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      padding: 0.5rem 0.8rem;
+      background: var(--ink);
+      color: var(--yellow);
+      text-transform: uppercase;
+      flex-shrink: 0;
+      transform: rotate(-3deg);
+    }
+
+    /* === continuous mechanical motion (stepped, no easing) === */
+
+    /* UX boxes flip color in sequence */
+    .cert-block.ux.visible .wf-row .wf-bar {
+      animation: boxFlip 2.6s steps(1, jump-none) infinite;
+      animation-delay: 1.4s;
+    }
+    .cert-block.ux.visible .wf-row .wf-bar:nth-child(2) { animation-delay: 1.7s; }
+    .cert-block.ux.visible .wf-row .wf-bar:nth-child(3) { animation-delay: 2s; }
+    @keyframes boxFlip {
+      0%, 49.9% { background: #2D5FD8; }
+      50%, 100% { background: #1A1A1A; }
+    }
+
+    /* UX header bar — step width pulse */
+    .cert-block.ux.visible .wf-h {
+      animation: hStep 3.6s steps(3, jump-none) infinite;
+      animation-delay: 1.5s;
+    }
+    @keyframes hStep {
+      0%, 33%   { width: 65%; }
+      34%, 66%  { width: 42%; }
+      67%, 100% { width: 78%; }
+    }
+
+    /* UX thin lines blink */
+    .cert-block.ux.visible .wf-line {
+      animation: lineBlink 2.2s steps(1, jump-none) infinite;
+      animation-delay: 1.3s;
+    }
+    .cert-block.ux.visible .wf-line.thin {
+      animation-name: lineBlinkThin;
+      animation-delay: 1.6s;
+    }
+    @keyframes lineBlink {
+      0%, 49.9% { opacity: 1; }
+      50%, 100% { opacity: 0.25; }
+    }
+    @keyframes lineBlinkThin {
+      0%, 49.9% { opacity: 1; }
+      50%, 100% { opacity: 0.4; }
+    }
+
+    /* AI 4 lines — marching ants */
+    .cert-block.ai.visible line.ai-shape {
+      stroke-dasharray: 7 5;
+      animation: ants 0.9s linear infinite;
+      animation-delay: 1.6s;
+    }
+    @keyframes ants { to { stroke-dashoffset: -12; } }
+
+    /* SVG shapes share rotation origin */
+    rect.ai-shape, polygon.ai-shape, circle.ai-shape {
+      transform-box: fill-box;
+      transform-origin: center;
+      vector-effect: non-scaling-stroke;
+    }
+
+    /* AI red big circle — color blink */
+    .cert-block.ai.visible circle.ai-shape.s1 {
+      animation: redFlip 2.4s steps(1, jump-none) infinite;
+      animation-delay: 1.5s;
+    }
+    @keyframes redFlip {
+      0%, 49.9% { fill: #E63946; }
+      50%, 100% { fill: #1A1A1A; }
+    }
+
+    /* AI black box — step rotate */
+    .cert-block.ai.visible rect.ai-shape {
+      animation: stepSpin 3.2s steps(4, jump-none) infinite;
+      animation-delay: 1.7s;
+    }
+    @keyframes stepSpin { to { transform: rotate(360deg); } }
+
+    /* AI yellow circle — step scale */
+    .cert-block.ai.visible circle.ai-shape.s3 {
+      animation: stepScale 2.6s steps(1, jump-none) infinite;
+      animation-delay: 1.8s;
+    }
+    @keyframes stepScale {
+      0%, 49.9% { transform: scale(1); }
+      50%, 100% { transform: scale(1.3); }
+    }
+
+    /* AI triangle — step flip */
+    .cert-block.ai.visible polygon.ai-shape {
+      animation: stepFlip 3.4s steps(1, jump-none) infinite;
+      animation-delay: 1.9s;
+    }
+    @keyframes stepFlip {
+      0%, 49.9% { transform: rotate(0deg); }
+      50%, 100% { transform: rotate(180deg); }
+    }
+
+    /* AI black big circle — pulse scale */
+    .cert-block.ai.visible circle.ai-shape.s5 {
+      animation: blackPulse 2.8s steps(1, jump-none) infinite;
+      animation-delay: 1.7s;
+    }
+    @keyframes blackPulse {
+      0%, 49.9% { transform: scale(1); }
+      50%, 100% { transform: scale(0.8); }
+    }
+
+    /* AI dots — opacity blink (stagger) */
+    .cert-block.ai.visible circle.ai-shape.s6 {
+      animation: dotBlink 1.5s steps(1, jump-none) infinite;
+      animation-delay: 1.8s;
+    }
+    .cert-block.ai.visible circle.ai-shape.s7 {
+      animation: dotBlink 1.5s steps(1, jump-none) infinite;
+      animation-delay: 2.1s;
+    }
+    @keyframes dotBlink {
+      0%, 49.9% { opacity: 1; }
+      50%, 100% { opacity: 0.15; }
+    }
+
+    /* Fusion mark — print misalignment shift */
+    .cert-fusion .f-shape.sq {
+      animation: stepShift 3.2s steps(1, jump-none) infinite;
+    }
+    .cert-fusion .f-shape.circ {
+      animation: stepScale2 4s steps(1, jump-none) infinite;
+      animation-delay: 0.4s;
+    }
+    @keyframes stepShift {
+      0%, 49.9% { transform: translate(0, 0); }
+      50%, 100% { transform: translate(-6px, -6px); }
+    }
+    @keyframes stepScale2 {
+      0%, 49.9% { transform: scale(1); }
+      50%, 100% { transform: scale(1.08); }
+    }
+
+    @media (max-width: 880px) {
+      .cert-modules { grid-template-columns: 1fr; }
+      .cert-fusion { flex-direction: column; align-items: flex-start; text-align: left; }
+      .cert-deco.circle-red { width: 160px; height: 160px; top: -60px; }
+      .cert-deco.line-yellow { width: 180px; }
     }
 
     /* ── PROJECTS ── */
@@ -430,6 +765,21 @@
     .project-row:nth-child(4) .project-visual:hover .project-image-frame { box-shadow: 17px 17px 0 var(--red); }
     .project-row:nth-child(5) .project-image-frame { box-shadow: 12px 12px 0 var(--yellow); }
     .project-row:nth-child(5) .project-visual:hover .project-image-frame { box-shadow: 17px 17px 0 var(--yellow); }
+    .project-row:nth-child(6) .project-image-frame { box-shadow: 12px 12px 0 var(--red); }
+    .project-row:nth-child(6) .project-visual:hover .project-image-frame { box-shadow: 17px 17px 0 var(--red); }
+
+    .project-status {
+      display: inline-block;
+      background: var(--ink);
+      color: var(--yellow);
+      padding: 0.3rem 0.7rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: var(--line) solid var(--ink);
+      margin-bottom: 0.8rem;
+    }
 
     .project-number {
       font-family: 'Archivo Black', sans-serif;
@@ -680,7 +1030,6 @@
       nav a { font-size: 0.7rem; }
       .geo-circle-red { width: 180px; height: 180px; }
       .geo-square-blue { width: 80px; height: 80px; }
-      .cert-card { flex-direction: column; }
     }
   </style>
 </head>
@@ -730,35 +1079,71 @@
 
   <!-- CERTIFICATION -->
   <section id="cert">
+    <span class="cert-deco circle-red"></span>
+    <span class="cert-deco square-blue"></span>
+    <span class="cert-deco line-yellow"></span>
+    <span class="cert-deco dot-ink"></span>
+
     <div class="section-head reveal">
       <span class="section-marker red"></span>
       <p class="section-label">Credentials</p>
     </div>
-    <h2 class="section-title reveal">Certification</h2>
-    <p class="section-desc reveal">
-      Formal recognition of my product management knowledge and skills.
-    </p>
-    <div class="cert-card reveal">
-      <div class="cert-icon">🏅</div>
-      <div>
-        <span class="cert-badge">⏳ Incoming</span>
-        <h3>IBM AI Product Manager Professional Certificate</h3>
-        <p>
-          A comprehensive program covering product strategy, roadmapping,
-          user research, agile methodologies, and go-to-market execution —
-          issued by IBM via Coursera.
-        </p>
-        <div class="cert-progress-wrap">
-          <div class="cert-progress-label">
-            <span>Progress</span>
-            <span>56%</span>
+    <h2 class="cert-headline reveal">Building<br>AI<span class="times">×</span>UX Skills<span class="red-accent">.</span></h2>
+    <p class="cert-sub reveal">Modules in Assembly</p>
+
+    <div class="cert-modules">
+      <!-- UX BLOCK -->
+      <div class="cert-block ux reveal">
+        <span class="block-tag">Module 01 · UX Design</span>
+        <div class="block-visual">
+          <div class="ux-stage">
+            <div class="wf-bar wf-h b1"></div>
+            <div class="wf-row b2">
+              <div class="wf-bar wf-box"></div>
+              <div class="wf-bar wf-box"></div>
+              <div class="wf-bar wf-box"></div>
+            </div>
+            <div class="wf-bar wf-line b4" style="width: 70%;"></div>
+            <div class="wf-bar wf-line thin b5" style="width: 50%;"></div>
+            <div class="wf-bar wf-line thin b6" style="width: 60%;"></div>
           </div>
-          <div class="cert-progress-bar">
-            <div class="cert-progress-fill" data-width="56"></div>
-          </div>
+        </div>
+        <div class="block-pct">10<span>%</span></div>
+        <h3 class="block-title">Google UX Design Professional</h3>
+        <p class="block-desc">UX research, wireframing, prototyping, usability testing, and design systems.</p>
+        <div class="block-progress">
+          <div class="block-progress-fill cert-progress-fill" data-width="10"></div>
+        </div>
+      </div>
+
+      <!-- AI BLOCK -->
+      <div class="cert-block ai reveal">
+        <span class="block-tag">Module 02 · AI Product</span>
+        <div class="block-visual">
+          <svg class="ai-stage" viewBox="0 0 280 200" preserveAspectRatio="xMidYMid meet">
+            <line class="ai-shape s2" x1="50"  y1="50"  x2="140" y2="100" stroke="#1A1A1A" stroke-width="2.5"/>
+            <line class="ai-shape s3" x1="140" y1="100" x2="240" y2="55"  stroke="#1A1A1A" stroke-width="2.5"/>
+            <line class="ai-shape s4" x1="140" y1="100" x2="100" y2="160" stroke="#1A1A1A" stroke-width="2.5"/>
+            <line class="ai-shape s5" x1="140" y1="100" x2="220" y2="160" stroke="#1A1A1A" stroke-width="2.5"/>
+
+            <circle class="ai-shape s1" cx="50"  cy="50"  r="16" fill="#E63946" stroke="#1A1A1A" stroke-width="2.5"/>
+            <rect   class="ai-shape s2" x="125"  y="85"  width="30" height="30" fill="#1A1A1A"/>
+            <circle class="ai-shape s3" cx="240" cy="55"  r="11" fill="#FFD43B" stroke="#1A1A1A" stroke-width="2.5"/>
+            <polygon class="ai-shape s4" points="100,144 114,170 86,170" fill="#E63946" stroke="#1A1A1A" stroke-width="2.5"/>
+            <circle class="ai-shape s5" cx="220" cy="160" r="11" fill="#1A1A1A"/>
+            <circle class="ai-shape s6" cx="55"  cy="155" r="7"  fill="#1A1A1A"/>
+            <circle class="ai-shape s7" cx="255" cy="125" r="6"  fill="#E63946"/>
+          </svg>
+        </div>
+        <div class="block-pct">30<span>%</span></div>
+        <h3 class="block-title">IBM AI Product Manager Professional</h3>
+        <p class="block-desc">AI product strategy, model lifecycle, roadmapping, and go-to-market execution.</p>
+        <div class="block-progress">
+          <div class="block-progress-fill cert-progress-fill" data-width="30"></div>
         </div>
       </div>
     </div>
+
   </section>
 
   <!-- PROJECTS -->
@@ -772,16 +1157,37 @@
       Real-world tools built through vibe coding with Claude AI — from concept to working product.
     </p>
     <div class="projects-stack">
+      <div class="project-row reveal">
+        <a href="https://huicnvictor.github.io/invest-tracker/" class="project-visual" target="_blank">
+          <div class="project-image-frame">
+            <img src="media/invest-tracker/cover.png" alt="Invest Tracker dashboard">
+          </div>
+        </a>
+        <div class="project-info">
+          <div class="project-number">01 / 06</div>
+          <span class="project-status">⏳ In Progress</span>
+          <h3 class="project-title">Invest Tracker</h3>
+          <p class="project-tagline">FIRE math, price alerts, and an investing library in one place.</p>
+          <div class="project-tags-row">
+            <span class="project-tag">Personal Finance</span>
+            <span class="project-tag">Automation</span>
+            <span class="project-tag">Vibe Coding</span>
+          </div>
+          <p class="project-description">A personal investing toolkit: a FIRE calculator for annual contribution targets, scheduled price alerts that email me when a watched ETF crosses my buy or sell threshold, and a growing knowledge base for curated reading and videos.</p>
+          <a href="https://huicnvictor.github.io/invest-tracker/" class="project-cta" target="_blank">View Live →</a>
+        </div>
+      </div>
+
       <!-- PULSE_PLAN_START -->
       <!-- Auto-synced from pulse-plan/project-meta.json — last updated 2026-05-17 · v1.3 -->
-      <div class="project-row reveal">
+      <div class="project-row flip reveal">
         <a href="pulse-plan.html" class="project-visual">
           <div class="project-image-frame">
             <img src="media/pulse-plan/dashboard.png" alt="Pulse Plan dashboard">
           </div>
         </a>
         <div class="project-info">
-          <div class="project-number">01 / 05</div>
+          <div class="project-number">02 / 06</div>
           <h3 class="project-title">Pulse Plan</h3>
           <p class="project-tagline">Plans, goals, and learning maps in one place.</p>
           <div class="project-tags-row">
@@ -795,14 +1201,14 @@
       </div>
       <!-- PULSE_PLAN_END -->
 
-      <div class="project-row flip reveal">
+      <div class="project-row reveal">
         <a href="cleaning-tracker.html" class="project-visual">
           <div class="project-image-frame">
             <img src="media/dashboard.png" alt="Cleaning Tracker dashboard">
           </div>
         </a>
         <div class="project-info">
-          <div class="project-number">02 / 05</div>
+          <div class="project-number">03 / 06</div>
           <h3 class="project-title">Cleaning Tracker</h3>
           <p class="project-tagline">Receipts in, expenses and bookings out.</p>
           <div class="project-tags-row">
@@ -815,14 +1221,14 @@
         </div>
       </div>
 
-      <div class="project-row reveal">
+      <div class="project-row flip reveal">
         <a href="unistay.html" class="project-visual">
           <div class="project-image-frame">
             <img src="media/unistay/主页面1.png" alt="UniStay home page">
           </div>
         </a>
         <div class="project-info">
-          <div class="project-number">03 / 05</div>
+          <div class="project-number">04 / 06</div>
           <h3 class="project-title">UniStay</h3>
           <p class="project-tagline">Renting in a foreign country, with trust built in.</p>
           <div class="project-tags-row">
@@ -835,14 +1241,14 @@
         </div>
       </div>
 
-      <div class="project-row flip reveal">
+      <div class="project-row reveal">
         <a href="safety-buddy.html" class="project-visual">
           <div class="project-image-frame">
             <img src="media/safety-buddy/cover.png" alt="Safety Buddy concept">
           </div>
         </a>
         <div class="project-info">
-          <div class="project-number">04 / 05</div>
+          <div class="project-number">05 / 06</div>
           <h3 class="project-title">Safety Buddy</h3>
           <p class="project-tagline">Spotting scams with a buddy by your side.</p>
           <div class="project-tags-row">
@@ -855,14 +1261,14 @@
         </div>
       </div>
 
-      <div class="project-row reveal">
+      <div class="project-row flip reveal">
         <a href="akaflieg.html" class="project-visual">
           <div class="project-image-frame">
             <img src="media/akaflieg/mainpage-final.png" alt="Akaflieg redesigned main page">
           </div>
         </a>
         <div class="project-info">
-          <div class="project-number">05 / 05</div>
+          <div class="project-number">06 / 06</div>
           <h3 class="project-title">Akaflieg</h3>
           <p class="project-tagline">Making a student aviation club's site easy to join.</p>
           <div class="project-tags-row">
